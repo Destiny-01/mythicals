@@ -1,0 +1,175 @@
+:root {
+  --white: #ffffff;
+  --bg: #141625;
+  --grey: #c3c3c3;
+  --main: #ad4123;
+  --accent: #f4d1c8;
+  --secondary: #ab7f39;
+  --gradient: #906c31;
+}
+
+body {
+  font-family: "Open Sans", sans-serif;
+  background-color: var(--bg);
+  color: var(--white);
+}
+
+.nav-link {
+  color: var(--white);
+}
+
+.nav-link:hover {
+  color: var(--grey);
+}
+
+.nav-link.active {
+  color: var(--main);
+}
+
+.btn {
+  padding: 12px 28px;
+  color: var(--white);
+  border: 2px solid var(--secondary);
+  background: var(--main);
+  /* box-shadow: 0px -6px 12px 0px #0000004d inset; */
+  box-shadow: 0px 6px 12px 0px #ffffff4d inset,
+    0px -6px 12px 0px #0000004d inset;
+  border-radius: 13px;
+}
+
+.btn:hover {
+  border: 2px solid var(--secondary);
+  background: var(--main);
+  box-shadow: 0px 6px 12px 0px #ffffff4d inset,
+    0px -6px 12px 0px #0000004d inset;
+  border-radius: 13px;
+}
+
+.btn:active,
+.btn:focus,
+.navbar-toggler:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.btn-outline-secondary,
+.btn-outline-secondary:hover {
+  border: 2px solid var(--accent);
+  background: transparent;
+  color: var(--accent);
+  box-shadow: none;
+}
+
+h1 {
+  font-family: "PT Serif", serif;
+  font-weight: bold;
+  font-size: 3rem;
+}
+
+h4 {
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--grey);
+}
+@media screen and (max-width: 768px) {
+  /* CSS for screens that are 320 pixels or less will be put in this section */
+  h1 {
+    font-size: 2rem;
+  }
+  h4 {
+    font-size: 16px;
+  }
+}
+
+h2 {
+  font-family: "PT Serif", serif;
+  font-weight: normal;
+  font-size: 1.5rem;
+}
+
+.navbar-dark .navbar-toggler {
+  padding: 0.75rem;
+  color: rgba(255, 255, 255, 0.88);
+  border-color: rgba(255, 255, 255, 0.55);
+}
+
+.card {
+  background: #191d30;
+}
+
+.card.gamecard {
+  border: 9px solid #21212f;
+  cursor: not-allowed;
+}
+
+.card.gamecard.active {
+  border: 9px solid var(--main);
+  outline: 2px solid var(--secondary);
+  cursor: pointer;
+}
+
+.caption {
+  color: var(--grey);
+  font-size: 14px;
+}
+
+.modal-backdrop {
+  background-color: #141625;
+}
+
+.modal-backdrop.show {
+  opacity: 0.9;
+}
+
+.modal-content {
+  background-color: #191d30;
+  border-radius: 1rem;
+  padding-top: 1rem;
+  padding-bottom: 2rem;
+}
+
+.modal-header {
+  padding-top: 0px;
+  border-bottom: 1px solid #ffffff0b;
+}
+
+.modal-header .btn-close {
+  color: rgba(255, 255, 255, 0.88);
+}
+
+h5 {
+  font-size: 18px;
+  font-weight: medium;
+  font-family: "PT Serif", serif;
+}
+
+.guesses {
+  max-height: 240px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  /* padding-right: 400px; */
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 2px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.keyboard .cell {
+  cursor: pointer;
+}
