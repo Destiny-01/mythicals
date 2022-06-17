@@ -12,7 +12,7 @@ export const metamaskConnect = () => {
       .focus();
     return;
   }
-  ethereum.request({ method: "eth_accounts" }).then((accounts) => {
+  ethereum.request({ method: "eth_requestAccounts" }).then((accounts) => {
     localStorage.setItem("_metamask", accounts[0]);
     console.log(accounts[0]);
   });

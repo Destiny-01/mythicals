@@ -17,7 +17,7 @@ export default function NavbarWrapper() {
   const [isToggled, setIsToggled] = useState(false);
   let location = useLocation();
   const address = localStorage.getItem("_metamask");
-  console.log(location);
+  console.log(address);
   return (
     <div>
       <Navbar expand="md" className="p-0 m-0" dark>
@@ -49,8 +49,9 @@ export default function NavbarWrapper() {
           </Nav>
           <Nav className={`${location.pathname === "/" ? "ms-0" : "ms-auto"}`}>
             {address && window.ethereum.selectedAddress ? (
-              address.substring(0, 5) + "..." + address.substring(19, 24)
+              <p>{address}</p>
             ) : (
+              // address.substring(0, 5) + "..." + address.substring(19, 24)
               <SelectWallet />
             )}
           </Nav>
