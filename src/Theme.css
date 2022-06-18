@@ -185,6 +185,13 @@ h5 {
   background-position: center center;
 }
 
-input {
+.form-control {
   background-color: #191d30;
+  border: none;
+  color: var(--accent);
+}
+
+.form-control:focus {
+  background-color: #191d30;
+  border: 1px solid var(--main);
 }
