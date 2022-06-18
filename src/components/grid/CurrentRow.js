@@ -12,7 +12,7 @@ export const CurrentRow = ({ guess, select }) => {
       } `}
     >
       {splitGuess.map((letter, i) => (
-        <Cell key={i} id={letter} />
+        <Cell key={i} id={letter} select />
       ))}
       {emptyCells.map((_, i) => (
         <Cell key={i} state="default" />
