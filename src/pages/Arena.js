@@ -1,207 +1,93 @@
-import React from "react";
+import React, { useState } from "react";
 import { Col, Container, Row } from "reactstrap";
-import egg1 from "../assets/eggs/egg1.svg";
-import egg2 from "../assets/eggs/egg2.svg";
-import eggDefault from "../assets/eggs/eggDefault.svg";
-import Avatar1 from "../assets/Avatar1.png";
 import NavbarWrapper from "../components/NavbarWrapper";
-import CellCard from "../components/grid/CellCard";
-import Keyboard from "../components/grid/Keyboard";
+import Keyboard from "../components/keyboard/Keyboard";
+import { Grid } from "../components/grid/Grid";
 
 export default function Arena() {
+  const [currentGuess, setCurrentGuess] = useState("");
+  const [solution, setSolution] = useState("");
+  const [isGameWon, setIsGameWon] = useState(false);
+  const [isLoseModalOpen, setIsLoseModalOpen] = useState(false);
+  const [isGameEnded, setIsGameEnded] = useState(false);
+  const [isEnter, setIsEnter] = useState(false);
+  const [isAboutModalOpen, setAboutModalOpen] = useState(false);
+  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
+  const [isWordNotFoundAlertOpen, setIsWordNotFoundAlertOpen] = useState(false);
+  const [turn, setTurn] = useState(1);
+  const [oppGameCode, setOppGameCode] = useState("");
+  const [myGuesses, setMyGuesses] = useState([]);
+  const [opponentGuesses, setOpponentGuesses] = useState([]);
+  const [myStatus, setMyStatus] = useState([]);
+  const [opponentStatus, setOpponentStatus] = useState([]);
+
+  const isTurn = true;
+
+  const onChar = (value) => {
+    if (currentGuess.length < 5 && !isGameEnded) {
+      setCurrentGuess(`${currentGuess}${value}`);
+    }
+  };
+
+  const onDelete = () => {
+    setCurrentGuess(currentGuess.slice(0, -1));
+  };
+
+  const onEnter = () => {
+    const guessArr = String(currentGuess)
+      .split("")
+      .map((currentGuess) => {
+        return Number(currentGuess);
+      });
+    if (
+      currentGuess.length !== 5 ||
+      !guessArr.every((e, i, a) => a.indexOf(e) === i)
+    ) {
+      setIsWordNotFoundAlertOpen(true);
+      return setTimeout(() => {
+        setIsWordNotFoundAlertOpen(false);
+      }, 3000);
+    }
+    setMyGuesses((guess) => [...myGuesses, guess]);
+    setCurrentGuess("");
+    // verifyGuess(inputs).then((verified) => {
+    //  verified ===true&&  setCurrentGuess('')
+    // })
+  };
+
   return (
     <div class="position-relative" style={{ minHeight: "100vh" }}>
       <Container>
         <NavbarWrapper />
         <Row className=" mx-md-5 mt-3">
-          <Col>
-            <div className="">
-              <div className="d-flex align-center">
-                <div className="">
-                  <img src={Avatar1} alt="" className=" me-2" />
-                </div>
-                <div className="">
-                  <p className="mb-0 d-line">Velloga </p>
-                  <p className="caption">5Wins 0Losses</p>
-                </div>
-              </div>
-
-              <Row className="row-cols-auto mb-2 g-2">
-                <CellCard id={1} state="dead" />
-                <CellCard id={1} state="dead" />
-                {/* <CellCard id={1} /> */}
-
-                <Col>
-                  <img src={egg1} alt="" />
-                </Col>
-                <Col>
-                  <img src={eggDefault} alt="" />
-                </Col>
-                <Col>
-                  <img src={egg1} alt="" />
-                </Col>
-              </Row>
-              <hr />
-              <div className="guesses">
-                <Row className="row-cols-auto mb-2 g-2">
-                  <Col>
-                    <img src={egg1} alt="" />
-                  </Col>
-                  <Col>
-                    <img src={egg2} alt="" />
-                  </Col>
-                  <Col>
-                    <img src={egg1} alt="" />
-                  </Col>
-                  <Col>
-                    <img src={eggDefault} alt="" />
-                  </Col>
-                  <Col>
-                    <img src={egg1} alt="" />
-                  </Col>
-                </Row>
-                <Row className="row-cols-auto mb-2 g-2">
-                  <Col>
-                    <img src={egg1} alt="" />
-                  </Col>
-                  <Col>
-                    <img src={egg2} alt="" />
-                  </Col>
-                  <Col>
-                    <img src={egg1} alt="" />
-                  </Col>
-                  <Col>
-                    <img src={eggDefault} alt="" />
-                  </Col>
-                  <Col>
-                    <img src={egg1} alt="" />
-                  </Col>
-                </Row>
-                <Row className="row-cols-auto mb-2 g-2">
-                  <Col>
-                    <img src={egg1} alt="" />
-                  </Col>
-                  <Col>
-                    <img src={egg2} alt="" />
-                  </Col>
-                  <Col>
-                    <img src={egg1} alt="" />
-                  </Col>
-                  <Col>
-                    <img src={eggDefault} alt="" />
-                  </Col>
-                  <Col>
-                    <img src={egg1} alt="" />
-                  </Col>
-                </Row>
-                <Row className="row-cols-auto mb-2 g-2">
-                  <Col>
-                    <img src={egg1} alt="" />
-                  </Col>
-                  <Col>
-                    <img src={egg2} alt="" />
-                  </Col>
-                  <Col>
-                    <img src={egg1} alt="" />
-                  </Col>
-                  <Col>
-                    <img src={eggDefault} alt="" />
-                  </Col>
-                  <Col>
-                    <img src={egg1} alt="" />
-                  </Col>
-                </Row>{" "}
-              </div>
-            </div>
-          </Col>
+          <Grid
+            player="My"
+            guesses={myGuesses}
+            currentGuess={currentGuess}
+            solution={""}
+            isTurn={isTurn}
+            status={myStatus}
+          />
           <Col></Col>
-          <Col>
-            <div className="">
-              <div className="d-flex align-center justify-content-end">
-                <div className="text-end">
-                  <p className="mb-0 d-line">Velloga </p>
-                  <p className="caption">5Wins 0Losses</p>
-                </div>
-                <div className="">
-                  <img src={Avatar1} alt="" className=" ms-2" />
-                </div>
-              </div>
-
-              <Row className="row-cols-auto mb-2 g-2">
-                <Col>
-                  <img src={egg1} alt="" />
-                </Col>
-                <Col>
-                  <img src={egg2} alt="" />
-                </Col>
-                <Col>
-                  <img src={egg1} alt="" />
-                </Col>
-                <Col>
-                  <img src={eggDefault} alt="" />
-                </Col>
-                <Col>
-                  <img src={egg1} alt="" />
-                </Col>
-              </Row>
-              <hr />
-              <Row className="row-cols-auto mb-2 g-2">
-                <Col>
-                  <img src={egg1} alt="" />
-                </Col>
-                <Col>
-                  <img src={egg2} alt="" />
-                </Col>
-                <Col>
-                  <img src={egg1} alt="" />
-                </Col>
-                <Col>
-                  <img src={eggDefault} alt="" />
-                </Col>
-                <Col>
-                  <img src={egg1} alt="" />
-                </Col>
-              </Row>
-              <Row className="row-cols-auto mb-2 g-2">
-                <Col>
-                  <img src={egg1} alt="" />
-                </Col>
-                <Col>
-                  <img src={egg2} alt="" />
-                </Col>
-                <Col>
-                  <img src={egg1} alt="" />
-                </Col>
-                <Col>
-                  <img src={eggDefault} alt="" />
-                </Col>
-                <Col>
-                  <img src={egg1} alt="" />
-                </Col>
-              </Row>
-
-              <Row className="row-cols-auto mb-2 g-2">
-                <Col>
-                  <img src={egg1} alt="" />
-                </Col>
-                <Col>
-                  <img src={egg2} alt="" />
-                </Col>
-                <Col>
-                  <img src={egg1} alt="" />
-                </Col>
-                <Col>
-                  <img src={eggDefault} alt="" />
-                </Col>
-                <Col>
-                  <img src={egg1} alt="" />
-                </Col>
-              </Row>
-            </div>
-          </Col>
+          <Grid
+            player="My"
+            guesses={myGuesses}
+            currentGuess={currentGuess}
+            solution={""}
+            isTurn={isTurn}
+            status={myStatus}
+          />
         </Row>
 
-        <Keyboard />
+        <Keyboard
+          solution={solution}
+          onChar={onChar}
+          onDelete={onDelete}
+          onEnter={onEnter}
+          guesses={myGuesses}
+          isTurn={isTurn}
+          currentGuess={currentGuess}
+        />
       </Container>
     </div>
   );

@@ -1,12 +1,12 @@
 import React from "react";
-import { Col, Container, Row } from "reactstrap";
-import Avatar1 from "../../assets/Avatar1.png";
-import NavbarWrapper from "../../components/NavbarWrapper";
-import CellCard from "../../components/grid/CellCard";
+import { Key } from "./Key";
+import { Container, Row } from "reactstrap";
+
 import { eggsArray } from "../../data/eggsArray";
 
-export default function Keyboard({ onChar, onDelete, onEnter }) {
+export default function Keyboard({ onChar, onDelete, onEnter, currentGuess }) {
   const onClick = (id) => {
+    // console.log("x", guessArr);
     if (id === "submit") {
       onEnter();
     } else if (id === "delete") {
@@ -15,32 +15,38 @@ export default function Keyboard({ onChar, onDelete, onEnter }) {
       onChar(id);
     }
   };
+
   return (
     <Container className="keyboard mb-3 position-absolute bottom-0 start-50 translate-middle-x">
       <Row className="row-cols-auto mb-2 justify-content-center g-2">
         {eggsArray.slice(0, 7).map((egg) => {
           return (
-            <Col key={egg.id}>
-              <CellCard id={egg.id} state="dead" onClick={onClick} />
-            </Col>
+            <Key
+              id={egg.id}
+              state="dead"
+              image={egg.image}
+              onClick={onClick}
+              currentGuess={currentGuess}
+            />
           );
         })}
       </Row>
       <Row className="row-cols-auto justify-content-center g-2">
-        <Col>
-          <CellCard id="submit" state="default" onClick={onClick} />
-        </Col>
+        <Key id="submit" state="default" onClick={onClick} />
 
         {eggsArray.slice(7, 11).map((egg) => {
           return (
-            <Col key={egg.id}>
-              <CellCard id={egg.id} state="injured" onClick={onClick} />
-            </Col>
+            <Key
+              id={egg.id}
+              state="injured"
+              onClick={onClick}
+              image={egg.image}
+              currentGuess={currentGuess}
+            />
           );
         })}
-        <Col>
-          <CellCard id="delete" state="default" onClick={onClick} />
-        </Col>
+
+        <Key id="delete" state="default" onClick={onClick} />
       </Row>
     </Container>
   );
