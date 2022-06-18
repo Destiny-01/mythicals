@@ -2,6 +2,7 @@ import React from "react";
 import deadEgg from "../../assets/eggState/dead.svg";
 import injuredEgg from "../../assets/eggState/injured.svg";
 import { eggsArray } from "../../data/eggsArray";
+import eggDefault from "../../assets/eggs/eggDefault.svg";
 
 export function Cell({ id, state }) {
   const eggsState = [
@@ -17,7 +18,11 @@ export function Cell({ id, state }) {
 
   return (
     <div className="position-relative cell" style={{ width: "56px" }}>
-      {id && <img src={eggsArray[id - 1].image} alt="" />}
+      {id ? (
+        <img src={eggsArray[id].image} alt="" />
+      ) : (
+        <img src={eggDefault} alt="" />
+      )}
       {state && state !== "default" && (
         <img
           src={eggsState.find((el) => el.status === state).image}

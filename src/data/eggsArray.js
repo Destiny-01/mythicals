@@ -4,6 +4,10 @@ import egg3 from "../assets/eggs/egg3.svg";
 
 export const eggsArray = [
   {
+    id: 0,
+    image: egg3,
+  },
+  {
     id: 1,
     image: egg1,
   },
@@ -37,14 +41,6 @@ export const eggsArray = [
   },
   {
     id: 9,
-    image: egg3,
-  },
-  {
-    id: 10,
-    image: egg3,
-  },
-  {
-    id: 11,
     image: egg3,
   },
 ];

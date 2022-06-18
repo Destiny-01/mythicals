@@ -5,9 +5,6 @@ import HowToPlay from "../components/modals/HowToPlay";
 import { Link } from "react-router-dom";
 
 function Home() {
-  const handleClick = () => {
-    console.log("fff");
-  };
   return (
     <div className=" bg-overlay">
       <Container>

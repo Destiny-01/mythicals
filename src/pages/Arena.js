@@ -48,7 +48,7 @@ export default function Arena() {
         setIsWordNotFoundAlertOpen(false);
       }, 3000);
     }
-    setMyGuesses((guess) => [...myGuesses, guess]);
+    setMyGuesses((guess) => [...guess, currentGuess]);
     setCurrentGuess("");
     // verifyGuess(inputs).then((verified) => {
     //  verified ===true&&  setCurrentGuess('')

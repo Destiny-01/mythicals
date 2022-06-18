@@ -17,7 +17,7 @@ export default function NavbarWrapper() {
   const [isToggled, setIsToggled] = useState(false);
   let location = useLocation();
   const address = localStorage.getItem("_metamask");
-  console.log(address);
+
   return (
     <div>
       <Navbar expand="md" className="p-0 m-0" dark>

@@ -1,11 +1,11 @@
 import React from "react";
 import enterButton from "../../assets/eggActions/enter.svg";
 import deleteButton from "../../assets/eggActions/delete.svg";
+import eggDefault from "../../assets/eggs/eggDefault.svg";
 import { eggsArray } from "../../data/eggsArray";
 import { Col } from "reactstrap";
 
 export function Key({ id, image, onClick, currentGuess }) {
-  console.log("all", id, currentGuess);
   const guessArr = String(currentGuess)
     .split("")
     .map((guess) => {
@@ -15,18 +15,17 @@ export function Key({ id, image, onClick, currentGuess }) {
   const isClicked = (id) => {
     return guessArr.some((guess) => guess === id);
   };
-  console.log(isClicked());
+  console.log(id, image, isClicked(id));
   return (
-    <Col onClick={() => onClick(id)}>
+    <Col style={{ cursor: "pointer" }}>
       {id && id === "delete" ? (
-        <img src={deleteButton} alt="" />
+        <img src={deleteButton} alt="" onClick={() => onClick(id)} />
       ) : id && id === "submit" ? (
-        <img src={enterButton} alt="" />
+        <img src={enterButton} alt="" onClick={() => onClick(id)} />
+      ) : isClicked(id) ? (
+        <img src={eggDefault} alt="" style={{ cursor: "not-allowed" }} />
       ) : (
-        // ) : id && isClicked ? (
-        //   <img src={enterButton} alt="" onClick={onClick(id)} />
-        // id && console.log("ddd" + id)
-        id && <img src={image} alt="" />
+        <img src={image} alt="" onClick={() => onClick(id)} />
       )}
     </Col>
   );

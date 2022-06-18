@@ -19,8 +19,12 @@ export const Grid = ({
   // const [isError, setIsError] = useState(false);
 
   const empties =
-    guesses.length < 5 ? Array.from(Array(4 - guesses.length)) : [];
+    guesses.length > 2
+      ? Array.from(Array(1))
+      : Array.from(Array(3 - guesses.length));
 
+  //  guesses.length < 5 ? Array.from(Array(5 - guesses.length)) : [];
+  console.log(empties, guesses);
   return (
     <Col>
       <div className="">
@@ -39,7 +43,7 @@ export const Grid = ({
           {guesses.map((guess, i) => (
             <CompletedRow key={i} guess={guess} status={status && status[i]} />
           ))}
-          {guesses.length < 5 && <CurrentRow guess={currentGuess} />}
+          <CurrentRow guess={currentGuess} />
           {empties.map((_, i) => (
             <EmptyRow key={i} />
           ))}

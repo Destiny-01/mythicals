@@ -6,7 +6,6 @@ import { eggsArray } from "../../data/eggsArray";
 
 export default function Keyboard({ onChar, onDelete, onEnter, currentGuess }) {
   const onClick = (id) => {
-    // console.log("x", guessArr);
     if (id === "submit") {
       onEnter();
     } else if (id === "delete") {
@@ -22,6 +21,7 @@ export default function Keyboard({ onChar, onDelete, onEnter, currentGuess }) {
         {eggsArray.slice(0, 7).map((egg) => {
           return (
             <Key
+              key={egg.id}
               id={egg.id}
               state="dead"
               image={egg.image}
@@ -33,10 +33,12 @@ export default function Keyboard({ onChar, onDelete, onEnter, currentGuess }) {
       </Row>
       <Row className="row-cols-auto justify-content-center g-2">
         <Key id="submit" state="default" onClick={onClick} />
+        <Key id="submit" state="default" onClick={onClick} />
 
-        {eggsArray.slice(7, 11).map((egg) => {
+        {eggsArray.slice(7, 10).map((egg) => {
           return (
             <Key
+              key={egg.id}
               id={egg.id}
               state="injured"
               onClick={onClick}
