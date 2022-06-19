@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Col, Container, Row } from "reactstrap";
 import NavbarWrapper from "../components/NavbarWrapper";
 import Keyboard from "../components/keyboard/Keyboard";
+import { contract, subscription } from "../utils/contract";
 import { Grid } from "../components/grid/Grid";
 
 export default function Arena() {
@@ -20,6 +21,7 @@ export default function Arena() {
   const [opponentGuesses, setOpponentGuesses] = useState([]);
   const [myStatus, setMyStatus] = useState([]);
   const [opponentStatus, setOpponentStatus] = useState([]);
+  console.log(contract, subscription, "contract");
 
   const isTurn = true;
 

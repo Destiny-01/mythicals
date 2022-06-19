@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Collapse,
   Nav,
@@ -12,11 +12,18 @@ import {
 import Logo from "../assets/Logo.svg";
 import { useLocation } from "react-router-dom";
 import SelectWallet from "./modals/SelectWallet";
+import Avatar1 from "../assets/Avatar1.png";
 
 export default function NavbarWrapper() {
   const [isToggled, setIsToggled] = useState(false);
+  const [address, setAddress] = useState("");
   let location = useLocation();
-  const address = localStorage.getItem("_metamask");
+
+  useEffect(() => {
+    const myAddress = localStorage.getItem("_metamask");
+    console.log("_metamask", address);
+    myAddress && setAddress(window.ethereum.selectedAddress);
+  }, []);
 
   return (
     <div>
@@ -48,10 +55,17 @@ export default function NavbarWrapper() {
             </NavItem>
           </Nav>
           <Nav className={`${location.pathname === "/" ? "ms-0" : "ms-auto"}`}>
-            {address && window.ethereum.selectedAddress ? (
-              <p>{address}</p>
+            {address ? (
+              <div className="loggedin cad d-flex justify-content-center">
+                <div className="">
+                  <img src={Avatar1} alt="" />
+                </div>
+
+                <p>
+                  {address.slice(0, 5)}...{address.slice(-5)}
+                </p>
+              </div>
             ) : (
-              // address.substring(0, 5) + "..." + address.substring(19, 24)
               <SelectWallet />
             )}
           </Nav>

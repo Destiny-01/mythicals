@@ -21,6 +21,7 @@ export const metamaskConnect = () => {
         return;
       }
       localStorage.setItem("_metamask", accounts[0]);
+      window.location.reload();
       console.log(accounts[0]);
     });
   });
