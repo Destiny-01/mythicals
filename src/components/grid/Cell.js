@@ -4,7 +4,7 @@ import injuredEgg from "../../assets/eggState/injured.svg";
 import { eggsArray } from "../../data/eggsArray";
 import eggDefault from "../../assets/eggs/eggDefault.svg";
 
-export function Cell({ id, state }) {
+export function Cell({ id, state, select }) {
   const eggsState = [
     {
       status: "dead",
@@ -17,7 +17,10 @@ export function Cell({ id, state }) {
   ];
 
   return (
-    <div className="position-relative cell" style={{ width: "56px" }}>
+    <div
+      className="position-relative cell"
+      style={!select && { width: "56px" }}
+    >
       {id ? (
         <img src={eggsArray[id].image} alt="" />
       ) : (

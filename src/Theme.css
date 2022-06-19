@@ -180,3 +180,25 @@ h5 {
 .keyboard .cell {
   cursor: pointer;
 }
+
+.selectcard {
+  border-radius: 16px;
+}
+
+.waitingroom {
+  background-image: url("./assets/WaitingBG.png");
+  min-height: 100vh;
+  background-size: contain;
+  background-position: center center;
+}
+
+.form-control {
+  background-color: #191d30;
+  border: none;
+  color: var(--accent);
+}
+
+.form-control:focus {
+  background-color: #191d30;
+  border: 1px solid var(--main);
+}

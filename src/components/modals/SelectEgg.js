@@ -19,8 +19,12 @@ export default function SelectEgg() {
             alt=""
             className="img-fluid mx-auto d-block mb-3 "
           />
-          <h5 className="mb-3 text-center">Select eggs</h5>
-          <CurrentRow guess={currentGuess} />
+          <h5 className="mb-3 text-center">Select your unique egg pack</h5>
+          <Button block className="mb-3">
+            Create new game
+          </Button>
+
+          <Button block>Join existing</Button>
         </ModalBody>
       </Modal>
     </div>
