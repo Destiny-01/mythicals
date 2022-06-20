@@ -13,6 +13,7 @@ export const Grid = ({
   solution,
   isTurn,
   status,
+  ready,
 }) => {
   // const [isGameStarted, setIsGameStarted] = useState(false);
   // const [isGuessing, setIsGuessing] = useState(false);
@@ -24,7 +25,6 @@ export const Grid = ({
       : Array.from(Array(3 - guesses.length));
 
   //  guesses.length < 5 ? Array.from(Array(5 - guesses.length)) : [];
-  console.log(empties, guesses);
   return (
     <Col>
       <div className="">
@@ -33,12 +33,18 @@ export const Grid = ({
             <img src={Avatar1} alt="" className=" me-2" />
           </div>
           <div className="">
-            <p className="mb-0 d-line">Velloga </p>
+            <p className="mb-0 d-line">
+              {ready ? (
+                "Me "
+              ) : (
+                <span className="fst-italic">waiting for opponent</span>
+              )}
+            </p>
             <p className="caption">5Wins 0Losses</p>
           </div>
         </div>
 
-        <SolutionRow />
+        <SolutionRow solution={solution} />
         <div className="guesses">
           {guesses.map((guess, i) => (
             <CompletedRow key={i} guess={guess} status={status && status[i]} />

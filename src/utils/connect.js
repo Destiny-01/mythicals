@@ -20,8 +20,9 @@ export const metamaskConnect = () => {
         changeChainId();
         return;
       }
-      localStorage.setItem("_metamask", accounts[0]);
-      window.location.reload();
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
       console.log(accounts[0]);
     });
   });
@@ -84,6 +85,5 @@ const changeChainId = async () => {
   setTimeout(() => {
     window.location.reload();
   }, 2000);
-  localStorage.setItem("_metamask", accounts[0]);
   isCorrectChain = chainId === chain.chainId;
 };

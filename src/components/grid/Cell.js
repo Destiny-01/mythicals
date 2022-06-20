@@ -17,10 +17,7 @@ export function Cell({ id, state, select }) {
   ];
 
   return (
-    <div
-      className="position-relative cell"
-      style={!select && { width: "56px" }}
-    >
+    <div className="position-relative cell" style={{ width: "56px" }}>
       {id ? (
         <img src={eggsArray[id].image} alt="" />
       ) : (

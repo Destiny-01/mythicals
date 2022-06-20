@@ -15,7 +15,6 @@ export function Key({ id, image, onClick, currentGuess }) {
   const isClicked = (id) => {
     return guessArr.some((guess) => guess === id);
   };
-  console.log(id, image, isClicked(id));
   return (
     <Col style={{ cursor: "pointer" }}>
       {id && id === "delete" ? (

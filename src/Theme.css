@@ -38,6 +38,10 @@ body {
   border-radius: 13px;
 }
 
+a {
+  text-decoration: none;
+}
+
 .btn:hover {
   border: 2px solid var(--secondary);
   background: var(--main);
@@ -192,7 +196,8 @@ h5 {
   background-position: center center;
 }
 
-.form-control {
+.form-control,
+.form-control:disabled {
   background-color: #191d30;
   border: none;
   color: var(--accent);
@@ -201,4 +206,23 @@ h5 {
 .form-control:focus {
   background-color: #191d30;
   border: 1px solid var(--main);
+  color: var(--accent);
+  box-shadow: none;
+  border: none;
+}
+
+.waiting > .modal-content {
+  border: none;
+  background: transparent;
+}
+
+.waiting .btn {
+  border: none;
+  border-radius: 4px;
+  background: var(--card);
+  color: var(--grey);
+  box-shadow: none;
+}
+.waiting .btn:hover {
+  background: #20253d;
 }

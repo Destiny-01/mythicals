@@ -17,13 +17,14 @@ import Avatar1 from "../assets/Avatar1.png";
 export default function NavbarWrapper() {
   const [isToggled, setIsToggled] = useState(false);
   const [address, setAddress] = useState("");
-  let location = useLocation();
-
   useEffect(() => {
-    const myAddress = localStorage.getItem("_metamask");
-    console.log("_metamask", address);
-    myAddress && setAddress(window.ethereum.selectedAddress);
+    window.ethereum.request({ method: "eth_accounts" }).then((accounts) => {
+      accounts.length > 0 && setAddress(accounts[0]);
+      localStorage.setItem("_metamask", accounts[0]);
+    });
   }, []);
+  let location = useLocation();
+  console.log(address);
 
   return (
     <div>
@@ -56,12 +57,12 @@ export default function NavbarWrapper() {
           </Nav>
           <Nav className={`${location.pathname === "/" ? "ms-0" : "ms-auto"}`}>
             {address ? (
-              <div className="loggedin cad d-flex justify-content-center">
+              <div className="loggedin cad d-flex align-items-center">
                 <div className="">
-                  <img src={Avatar1} alt="" />
+                  <img src={Avatar1} alt="" className="me-2" />
                 </div>
 
-                <p>
+                <p className="m-0">
                   {address.slice(0, 5)}...{address.slice(-5)}
                 </p>
               </div>

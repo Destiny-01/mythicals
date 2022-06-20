@@ -16,7 +16,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/game" element={<GameMode />} />
-          <Route path="/play" element={<Arena />} />
+          <Route path="/room/:id" element={<Arena />} />
           <Route path="/egg" element={<SelectEgg />} />
           <Route path="/wait" element={<WaitingRoom />} />
         </Routes>
