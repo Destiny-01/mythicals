@@ -21,3 +21,15 @@ export const testnet = {
   rpcUrls: ["https://api.s0.b.hmny.io"],
   blockExplorerUrls: ["https://explorer.pops.one"],
 };
+
+export const devnet = {
+  chainId: "0x635AE020",
+  chainName: "Harmony Devnet",
+  nativeCurrency: {
+    name: "ONE",
+    symbol: "ONE",
+    decimals: 18,
+  },
+  rpcUrls: ["https://api.s0.ps.hmny.io"],
+  blockExplorerUrls: ["https://explorer.ps.hmny.io"],
+};

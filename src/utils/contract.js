@@ -5,7 +5,7 @@ const provider = window.provider
   ? window.provider
   : new providers.Web3Provider(window.ethereum);
 const signer = provider.getSigner();
-const address = "0x1c10d034B89F0dc09CdB4baB02875bFd397C3278";
+const address = "0xf3789DE4a687F81A05315f17e8bD6236aEb83887"; //devnet
 export const contract = new ethers.Contract(address, Dead.abi, signer);
 console.log(contract);
 
@@ -20,6 +20,7 @@ export const startGame = (
   action
 ) => {
   const salt = ethers.utils.randomBytes(16).join("2");
+  console.log(id, solution, sol1, action);
   if (action === "create") {
     contract
       .startGame(id, salt, solution, sol1, sol2, sol3, sol4, sol5)

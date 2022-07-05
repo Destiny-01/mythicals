@@ -4,6 +4,7 @@ import injuredEgg from "../../assets/eggState/injured.svg";
 import { eggsArray } from "../../data/eggsArray";
 import eggDefault from "../../assets/eggs/eggDefault.svg";
 import eggUnknown from "../../assets/eggs/eggUnknown.svg";
+import { Col } from "reactstrap";
 
 export function Cell({ id, state }) {
   const eggsState = [
@@ -18,7 +19,7 @@ export function Cell({ id, state }) {
   ];
 
   return (
-    <div className="position-relative cell" style={{ width: "56px" }}>
+    <Col className="position-relative cell" style={{ width: "56px" }}>
       {state === "unknown" ? (
         <img src={eggUnknown} alt="" />
       ) : state !== "default" ? (
@@ -36,6 +37,6 @@ export function Cell({ id, state }) {
             alt=""
           />
         )}
-    </div>
+    </Col>
   );
 }
