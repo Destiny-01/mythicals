@@ -88,15 +88,9 @@
       "anonymous": false,
       "inputs": [
         {
-          "indexed": false,
+          "indexed": true,
           "internalType": "uint256",
           "name": "_id",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_hash",
           "type": "uint256"
         }
       ],
@@ -107,19 +101,32 @@
       "anonymous": false,
       "inputs": [
         {
-          "indexed": false,
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "_id",
+          "type": "uint256"
+        }
+      ],
+      "name": "GameJoined",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
           "internalType": "uint256",
           "name": "_id",
           "type": "uint256"
         },
         {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_hash",
-          "type": "uint256"
+          "indexed": true,
+          "internalType": "address",
+          "name": "_winner",
+          "type": "address"
         }
       ],
-      "name": "GameJoined",
+      "name": "GameWon",
       "type": "event"
     },
     {
@@ -128,6 +135,16 @@
           "internalType": "uint256",
           "name": "_id",
           "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "guess",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256[5]",
+          "name": "status",
+          "type": "uint256[5]"
         },
         {
           "internalType": "uint256[2]",
@@ -145,9 +162,9 @@
           "type": "uint256[2]"
         },
         {
-          "internalType": "uint256[25]",
-          "name": "_calldata",
-          "type": "uint256[25]"
+          "internalType": "uint256[36]",
+          "name": "_input",
+          "type": "uint256[36]"
         }
       ],
       "name": "guessCode",
@@ -159,22 +176,28 @@
       "anonymous": false,
       "inputs": [
         {
-          "indexed": false,
+          "indexed": true,
           "internalType": "uint256",
           "name": "_id",
           "type": "uint256"
         },
         {
           "indexed": true,
-          "internalType": "bool",
-          "name": "_verified",
-          "type": "bool"
-        },
-        {
-          "indexed": true,
           "internalType": "address",
           "name": "_player",
           "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "_guess",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256[5]",
+          "name": "status",
+          "type": "uint256[5]"
         }
       ],
       "name": "Guessed",
@@ -215,6 +238,11 @@
         {
           "internalType": "uint256",
           "name": "_solution4",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_solution5",
           "type": "uint256"
         }
       ],
@@ -328,6 +356,11 @@
           "internalType": "uint256",
           "name": "_solution4",
           "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_solution5",
+          "type": "uint256"
         }
       ],
       "name": "startGame",
@@ -392,18 +425,12 @@
         },
         {
           "internalType": "uint256",
-          "name": "guess",
+          "name": "_guess",
           "type": "uint256"
         }
       ],
       "name": "won",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
+      "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
     },
@@ -463,19 +490,14 @@
               "type": "address"
             },
             {
-              "internalType": "uint256",
-              "name": "solution1",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "hash1",
-              "type": "uint256"
-            },
-            {
               "internalType": "address",
               "name": "player2",
               "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "solution1",
+              "type": "uint256"
             },
             {
               "internalType": "uint256",
@@ -485,6 +507,41 @@
             {
               "internalType": "uint256",
               "name": "hash2",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "hash1",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256[]",
+              "name": "guesses2",
+              "type": "uint256[]"
+            },
+            {
+              "internalType": "uint256[]",
+              "name": "guesses1",
+              "type": "uint256[]"
+            },
+            {
+              "internalType": "uint256[5][]",
+              "name": "status2",
+              "type": "uint256[5][]"
+            },
+            {
+              "internalType": "uint256[5][]",
+              "name": "status1",
+              "type": "uint256[5][]"
+            },
+            {
+              "internalType": "uint256",
+              "name": "salt1",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "salt2",
               "type": "uint256"
             },
             {
@@ -503,9 +560,47 @@
               "type": "bool"
             }
           ],
-          "internalType": "struct MythicalWars.Game",
+          "internalType": "struct DeadTarget.Game",
           "name": "game",
           "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPlayer",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "wins",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "losses",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct DeadTarget.Player",
+          "name": "player",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "hasher",
+      "outputs": [
+        {
+          "internalType": "contract IHasher",
+          "name": "",
+          "type": "address"
         }
       ],
       "stateMutability": "view",
@@ -600,6 +695,19 @@
       "type": "function"
     },
     {
+      "inputs": [],
+      "name": "tokenURI",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
       "inputs": [
         {
           "internalType": "uint256",
@@ -613,6 +721,19 @@
           "internalType": "string",
           "name": "",
           "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "verifier",
+      "outputs": [
+        {
+          "internalType": "contract IVerifier",
+          "name": "",
+          "type": "address"
         }
       ],
       "stateMutability": "view",

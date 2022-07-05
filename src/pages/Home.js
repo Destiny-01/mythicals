@@ -9,6 +9,7 @@ function Home() {
     <div className=" bg-overlay">
       <Container>
         <NavbarWrapper />
+
         <div className="text-center mt-5 ">
           <img
             src={LogoFull}
@@ -23,12 +24,11 @@ function Home() {
             Find and kill opponent’s pet ceatures in our fun online PVP game and
             earn tokes and <br />
             rewards when you win big games
-          </h4>{" "}
-          <div class=" ">
+          </h4>
+          <div>
             <Link to="/game">
-              <Button className="me-2"> Start playing</Button>
+              <Button className="me-2">Start playing</Button>
             </Link>
-
             <HowToPlay />
           </div>
         </div>

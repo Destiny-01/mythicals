@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, ModalBody, ModalFooter, ModalHeader, Modal } from "reactstrap";
+import { Button, ModalBody, Modal } from "reactstrap";
 import LogoRound from "../../assets/LogoRound.svg";
 import { Link } from "react-router-dom";
 

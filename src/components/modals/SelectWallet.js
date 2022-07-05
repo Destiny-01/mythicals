@@ -1,14 +1,5 @@
 import React, { useState } from "react";
-import {
-  Button,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
-  Modal,
-  Container,
-  Row,
-  Col,
-} from "reactstrap";
+import { Button, ModalBody, Modal, Container, Row, Col } from "reactstrap";
 import LogoRound from "../../assets/LogoRound.svg";
 import Metamask from "../../assets/logos/Metamask.svg";
 import WalletConnect from "../../assets/logos/WalletConnect.svg";

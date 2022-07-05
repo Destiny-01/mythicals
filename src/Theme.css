@@ -27,7 +27,8 @@ body {
   color: var(--main);
 }
 
-.btn {
+.btn,
+.aler {
   padding: 12px 28px;
   color: var(--white);
   border: 2px solid var(--secondary);
@@ -38,6 +39,16 @@ body {
   border-radius: 13px;
 }
 
+.alert {
+  border: none;
+  border-radius: 8px;
+  max-width: 400px;
+}
+
+.btn-close {
+  background: url("./assets/closeIcon.svg") no-repeat center center;
+}
+
 a {
   text-decoration: none;
 }
@@ -45,16 +56,18 @@ a {
 .btn:hover {
   border: 2px solid var(--secondary);
   background: var(--main);
-  box-shadow: 0px 6px 12px 0px #ffffff4d inset,
-    0px -6px 12px 0px #0000004d inset;
+  box-shadow: inset 4px 4px 8px rgba(255, 255, 255, 0.3),
+    inset -4px -4px 8px rgba(0, 0, 0, 0.3);
   border-radius: 13px;
 }
 
 .btn:active,
 .btn:focus,
+.btn:hover,
 .navbar-toggler:focus {
   outline: none;
-  box-shadow: none;
+  box-shadow: 0px 6px 12px 0px #ffffff4d inset,
+    0px -6px 12px 0px #0000004d inset;
 }
 
 .btn-outline-secondary,
@@ -106,6 +119,11 @@ h2 {
   border: 9px solid #21212f;
   cursor: not-allowed;
 }
+.guesscard {
+  background: var(--card);
+  padding: 16px;
+  border-radius: 6px;
+}
 
 .card.gamecard.active {
   border: 9px solid var(--main);
@@ -135,7 +153,8 @@ h2 {
 
 .modal-header {
   padding-top: 0px;
-  border-bottom: 1px solid #ffffff0b;
+  padding-bottom: 0px;
+  border: none;
 }
 
 .modal-header .btn-close {
@@ -163,22 +182,7 @@ h5 {
 
 /* width */
 ::-webkit-scrollbar {
-  width: 2px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #888;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  width: 0px;
 }
 
 .keyboard .cell {
@@ -225,4 +229,10 @@ h5 {
 }
 .waiting .btn:hover {
   background: #20253d;
+}
+
+.disabledKey {
+  opacity: 0.3;
+  pointer-events: none;
+  cursor: not-allowed;
 }

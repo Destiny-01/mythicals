@@ -8,12 +8,6 @@ import {
   Col,
   Container,
   Row,
-  Button,
-  Carousel,
-  CarouselIndicators,
-  CarouselItem,
-  CarouselCaption,
-  CarouselControl,
 } from "reactstrap";
 import NavbarWrapper from "../components/NavbarWrapper";
 import Game1 from "../assets/Game1.png";

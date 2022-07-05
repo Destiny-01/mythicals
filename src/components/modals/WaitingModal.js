@@ -1,17 +1,6 @@
 import React, { useState } from "react";
-import {
-  Button,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
-  Modal,
-  InputGroup,
-  Input,
-} from "reactstrap";
-import LogoRound from "../../assets/LogoRound.svg";
-import Avatar1 from "../../assets/Avatar1.png";
-import ReactLoading from "react-loading";
-import { useLocation } from "react-router-dom";
+import { Button, Modal, InputGroup, Input } from "reactstrap";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 let id = "";
 const characters = "01234567890";
@@ -22,7 +11,6 @@ export default function WaitingModal({ code, submit }) {
   const [isToggled, setIsToggled] = useState(true);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [inpCode, setCode] = useState("");
-  console.log(code);
   const onClick = () => {
     setIsSubmitted(true);
     submit(inpCode);
@@ -30,26 +18,18 @@ export default function WaitingModal({ code, submit }) {
 
   const createGame = {
     title: "A new game has been created",
-    body:
-      "  Share this code with your friend to play with them. You can minimize this modal to start playing",
+    body: "  Share this code with your friend to play with them. You can minimize this modal to start playing",
     icon: !isSubmitted ? "bi-clipboard2" : "bi-check",
     disabled: true,
     value: code,
-    isCopied: () => {
-      console.log("static");
-    },
   };
 
   const joinGame = {
     title: "You can join an exsiting game",
-    body:
-      "Enter the game code in the space below, submit the code and minimize to start playing",
+    body: "Enter the game code in the space below, submit the code and minimize to start playing",
     icon: !isSubmitted ? "bi-send" : "bi-check",
     disabled: false,
     value: "",
-    isCopied: () => {
-      console.log("static");
-    },
   };
 
   const data = code ? createGame : joinGame;
@@ -74,9 +54,11 @@ export default function WaitingModal({ code, submit }) {
               onChange={(e) => setCode(e.target.value)}
               disabled={data.disabled}
             />
-            <Button onClick={onClick}>
-              <i class={"bi " + data.icon}></i>
-            </Button>
+            <CopyToClipboard text={code}>
+              <Button onClick={onClick}>
+                <i class={"bi " + data.icon}></i>
+              </Button>
+            </CopyToClipboard>
           </InputGroup>
           <p
             className="caption"

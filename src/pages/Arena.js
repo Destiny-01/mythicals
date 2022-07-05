@@ -1,52 +1,135 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect } from "react";
 import { Col, Container, Row } from "reactstrap";
 import NavbarWrapper from "../components/NavbarWrapper";
 import Keyboard from "../components/keyboard/Keyboard";
-import { contract, subscription, getGame } from "../utils/contract";
+import {
+  contract,
+  convert,
+  getGame,
+  getGuessStatuses,
+  guessCode,
+  mintNFT,
+} from "../utils/contract";
 import { Grid } from "../components/grid/Grid";
 import { useParams } from "react-router-dom";
-import Web3 from "web3";
-const web3 = new Web3(window.ethereum);
+import { BigNumber } from "ethers";
+import ConfirmModal from "../components/modals/ConfirmModal";
+import WinGame from "../components/modals/WinGame";
+import LoseGame from "../components/modals/LoseGame";
 
 export default function Arena() {
   const [currentGuess, setCurrentGuess] = useState("");
   const [solution, setSolution] = useState("");
-  const [isGameWon, setIsGameWon] = useState(false);
-  const [isLoseModalOpen, setIsLoseModalOpen] = useState(false);
+  const [isGameWon, setIsGameWon] = useState("");
+  const [isGameLost, setIsGameLost] = useState(false);
   const [isGameEnded, setIsGameEnded] = useState(false);
-  const [isEnter, setIsEnter] = useState(false);
-  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
-  const [isPlayerReady, setIsPlayerReady] = useState(true);
-  const [isWordNotFoundAlertOpen, setIsWordNotFoundAlertOpen] = useState(false);
-  const [turn, setTurn] = useState(1);
-  const [oppGameCode, setOppGameCode] = useState("");
+  const [isGameStarted, setIsGameStarted] = useState(false);
+  const [isGuessedModalOpen, setIsGuessedModalOpen] = useState(false);
+  const [turn, setTurn] = useState(false);
+  const [oppSol, setOppSol] = useState("");
   const [myGuesses, setMyGuesses] = useState([]);
   const [opponentGuesses, setOpponentGuesses] = useState([]);
-  const [game, setGame] = useState(null);
   const [myStatus, setMyStatus] = useState([]);
   const [opponentStatus, setOpponentStatus] = useState([]);
-
-  const isTurn = true;
   const { id } = useParams();
+
   useEffect(() => {
-    getGame(id).then((game) => {
-      console.log(game, game.player1, localStorage.getItem("_metamask"));
-      setGame(game);
-      setSolution(
-        game.player1.toUpperCase() ===
-          localStorage.getItem("_metamask").toUpperCase()
-          ? game.solution1
-          : game.solution2
-      );
-      if (
-        game &&
-        (!web3.utils.isAddress(game.player1) ||
-          !web3.utils.isAddress(game.player2))
-      ) {
+    getGame(id).then((gam) => {
+      console.log("game", gam);
+      gam.player1.toUpperCase() ===
+        localStorage.getItem("_metamask").toUpperCase() &&
+      gam.guesses1.length > 0
+        ? setTurn(true)
+        : setTurn(
+            gam.turn.toUpperCase() ===
+              localStorage.getItem("_metamask").toUpperCase()
+          );
+      gam.guesses1.length > 0 && gam.active && setIsGameStarted(true);
+      if (/^0x0+$/.test(gam.player1) && /^0x0+$/.test(gam.player2)) {
         console.log("nn");
-        setIsPlayerReady(false);
+        setIsGameEnded(true);
+        return;
       }
+      let sol = 0;
+      const player =
+        gam.player1.toUpperCase() ===
+        localStorage.getItem("_metamask").toUpperCase()
+          ? 1
+          : gam.player2.toUpperCase() ===
+            localStorage.getItem("_metamask").toUpperCase()
+          ? 2
+          : null;
+      !/^0x0+$/.test(gam.winner) &&
+        (player === 1 ? setOppSol(gam.solution2) : setOppSol(gam.solution1));
+      let statusM = [];
+      const statusMy = [];
+      const statusOpp = [];
+      if (player === 1) {
+        sol = BigNumber.from(gam.solution1).toString();
+        gam.guesses2.length > 0 && setOpponentGuesses(convert(gam.guesses2));
+        statusM[1] = gam.status2;
+        gam.guesses1.length > 0 && setMyGuesses(convert(gam.guesses1));
+        statusM[0] = gam.status1;
+      } else if (player === 2) {
+        sol = BigNumber.from(gam.solution2).toString();
+        gam.guesses1.length > 0 && setOpponentGuesses(convert(gam.guesses1));
+        statusM[1] = gam.status1;
+        gam.guesses2.length > 0 && setMyGuesses(convert(gam.guesses2));
+        statusM[0] = gam.status2;
+      }
+      statusM[0].forEach((s) => {
+        statusMy.push(getGuessStatuses(s));
+      });
+      statusM[1].forEach((s) => {
+        statusOpp.push(getGuessStatuses(s));
+      });
+      setOpponentStatus((statuses) => [...statuses, ...statusOpp]);
+      setMyStatus((statuses) => [...statuses, ...statusMy]);
+      setSolution(sol.length < 5 ? "0" + sol : sol);
     });
+  }, [id, isGameStarted]);
+
+  useEffect(() => {
+    console.log("bululu");
+    contract.on("Guessed", (_id, player, guess, statu) => {
+      console.log("bululululul");
+      if (
+        opponentGuesses.includes(guess) ||
+        id !== _id.toString() ||
+        player.toUpperCase() === window.ethereum.selectedAddress.toUpperCase()
+      ) {
+        return;
+      }
+      setOpponentGuesses((guesses) => [...guesses, guess.toString()]);
+      const status = [];
+      statu.forEach((s) => status.push(s.toString()));
+      status.length < 5 && status.unshift("0");
+      const stat = getGuessStatuses(status);
+      console.log(_id, player, guess, status, stat);
+
+      setOpponentStatus((statuses) => [...statuses, stat]);
+      if (stat.every((x) => x === "dead")) {
+        setIsGameLost(true);
+        setIsGameEnded(true);
+        getGame(id).then((gam) => {
+          gam.player1 === window.ethereum.selectedAddress
+            ? setOppSol(gam.solution2)
+            : setOppSol(gam.solution1);
+        });
+      }
+      setTurn(true);
+    });
+  }, []);
+
+  useEffect(() => {
+    !isGameStarted &&
+      contract.on("GameJoined", (_id) => {
+        if (id !== _id.toString()) {
+          return;
+        }
+        setIsGameStarted(true);
+      });
   }, []);
 
   const onChar = (value) => {
@@ -69,42 +152,65 @@ export default function Arena() {
       currentGuess.length !== 5 ||
       !guessArr.every((e, i, a) => a.indexOf(e) === i)
     ) {
-      setIsWordNotFoundAlertOpen(true);
-      return setTimeout(() => {
-        setIsWordNotFoundAlertOpen(false);
-      }, 3000);
+      return;
     }
-    setMyGuesses((guess) => [...guess, currentGuess]);
-    setCurrentGuess("");
-    // verifyGuess(inputs).then((verified) => {
-    //  verified ===true&&  setCurrentGuess('')
-    // })
+    setIsGuessedModalOpen(true);
+    guessCode(id, guessArr)
+      .then((statuses) => {
+        console.log(statuses, "lkoikj");
+        setMyStatus((status) => [...status, statuses]);
+        setMyGuesses((guess) => [...guess, currentGuess]);
+        setTurn(false);
+        setIsGuessedModalOpen(false);
+        if (statuses.every((x) => x === "dead")) {
+          setIsGameWon(currentGuess);
+          setIsGameEnded(true);
+          getGame(id).then((gam) => {
+            gam.player1 === window.ethereum.selectedAddress
+              ? setOppSol(gam.solution2)
+              : setOppSol(gam.solution1);
+          });
+        }
+        setCurrentGuess("");
+      })
+      .catch((err) => console.log(err));
   };
+  console.log(myStatus, opponentStatus, oppSol);
 
   return (
     <div class="position-relative" style={{ minHeight: "100vh" }}>
       <Container>
         <NavbarWrapper />
+        <WinGame
+          isOpen={isGameWon}
+          mint={() =>
+            mintNFT(id, isGameWon)
+              .then((res) => setIsGameWon(""))
+              .catch((err) => console.log(err))
+          }
+          onClose={() => setIsGameWon("")}
+        />
+        <LoseGame isOpen={isGameLost} onClose={() => setIsGameLost(false)} />
+
+        <ConfirmModal isOpen={isGuessedModalOpen} />
         <Row className=" mx-md-5 mt-3">
           <Grid
-            player="My"
+            player="Your"
             guesses={myGuesses}
             currentGuess={currentGuess}
-            solution={solution}
-            isTurn={isTurn}
+            solution={oppSol}
             status={myStatus}
-            ready={true}
+            ready={isGameStarted}
           />
           <Col></Col>
 
           <Grid
-            player="My"
-            guesses={myGuesses}
-            currentGuess={currentGuess}
-            solution={""}
-            isTurn={isTurn}
-            status={myStatus}
-            ready={isPlayerReady}
+            player="Opponent"
+            guesses={opponentGuesses}
+            currentGuess={""}
+            solution={solution}
+            status={opponentStatus}
+            ready={true}
           />
         </Row>
 
@@ -113,7 +219,8 @@ export default function Arena() {
           onDelete={onDelete}
           onEnter={onEnter}
           guesses={myGuesses}
-          isTurn={isTurn}
+          isTurn={turn}
+          isGameEnded={isGameEnded}
           currentGuess={currentGuess}
         />
       </Container>

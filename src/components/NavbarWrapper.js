@@ -7,30 +7,34 @@ import {
   NavbarToggler,
   NavItem,
   NavLink,
-  Button,
 } from "reactstrap";
 import Logo from "../assets/Logo.svg";
 import { useLocation } from "react-router-dom";
 import SelectWallet from "./modals/SelectWallet";
 import Avatar1 from "../assets/Avatar1.png";
+// import { testnet } from "../utils/chains";
 
 export default function NavbarWrapper() {
   const [isToggled, setIsToggled] = useState(false);
   const [address, setAddress] = useState("");
   useEffect(() => {
     window.ethereum.request({ method: "eth_accounts" }).then((accounts) => {
+      // window.ethereum.request({ method: "eth_chainId" }).then((chainId) => {
+      //   if (accounts.length > 0 && chainId !== testnet.chainId) {
+      //     return alert("Connect to harmony chain");
+      //   }
+      // });
       accounts.length > 0 && setAddress(accounts[0]);
       localStorage.setItem("_metamask", accounts[0]);
     });
   }, []);
   let location = useLocation();
-  console.log(address);
 
   return (
     <div>
       <Navbar expand="md" className="p-0 m-0" dark>
         <NavbarBrand href="/" className="p-0 pe-md-5">
-          <img src={Logo} alt="" />
+          <img src={Logo} alt="WOw" />
         </NavbarBrand>
         <NavbarToggler onClick={() => setIsToggled(!isToggled)} />
         <Collapse navbar isOpen={isToggled}>

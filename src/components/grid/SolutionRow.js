@@ -1,5 +1,4 @@
-import { Col, Row } from "reactstrap";
-import egg1 from "../../assets/eggs/egg1.svg";
+import { Row } from "reactstrap";
 import { Cell } from "./Cell";
 
 export const SolutionRow = ({ solution }) => {
@@ -8,14 +7,18 @@ export const SolutionRow = ({ solution }) => {
     .map((solution) => {
       return Number(solution);
     });
+
+  const updatedArray =
+    solutionArr.length > 0 ? solutionArr : Array.from(Array(5));
   return (
     <div className="">
       <Row className="row-cols-auto mb-2 g-2">
-        {solutionArr.map((e, i) => {
-          return <Cell key={i} id={e} />;
+        {updatedArray.map((e, i) => {
+          return <Cell key={i} id={e} state={e === undefined && "unknown"} />;
         })}
       </Row>
-      <hr />
+
+      <hr style={{ width: "95%" }} />
     </div>
   );
 };

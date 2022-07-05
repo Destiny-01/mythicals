@@ -16,16 +16,17 @@ export default function HowToPlay() {
         centered
       >
         <ModalHeader charCode="Y" toggle={() => setIsToggled(!isToggled)}>
-          Modal title
+          How To Play
         </ModalHeader>
+        <hr />
         <ModalBody>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum.
+          The aim of the game is to guess the enemy's eggs egg correctly. After
+          each guess, the state of the egg will change to show you the status.
+          If the egg has a bloodstain on it, it means the egg is part of his
+          eggs and in the right position. If it has a medic sign, it means the
+          egg is part of his egg but not in the right position. If it doesn't
+          have any identifier, it means the egg is not part of his eggs. <br />{" "}
+          Enjoy!
         </ModalBody>
       </Modal>
     </Fragment>
