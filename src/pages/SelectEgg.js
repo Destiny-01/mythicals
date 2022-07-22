@@ -58,11 +58,11 @@ export default function SelectEgg() {
   };
 
   const onSubmit = (code) => {
-    setCode(code);
+    code && setCode(code);
   };
 
   return (
-    <div class="position-relative" style={{ minHeight: "100vh" }}>
+    <div className="position-relative" style={{ minHeight: "100vh" }}>
       <Container>
         <NavbarWrapper />
         <p className="caption fst-italic text-end">Game ID: {code}</p>

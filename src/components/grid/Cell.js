@@ -19,7 +19,7 @@ export function Cell({ id, state }) {
   ];
 
   return (
-    <Col className="position-relative cell" style={{ width: "56px" }}>
+    <Col className="position-relative cell mx-2" style={{ width: "56px" }}>
       {state === "unknown" ? (
         <img src={eggUnknown} alt="" />
       ) : state !== "default" ? (
@@ -33,7 +33,7 @@ export function Cell({ id, state }) {
         state !== "unknown" && (
           <img
             src={eggsState.find((el) => el.status === state).image}
-            class="position-absolute top-50 start-50 translate-middle"
+            className="position-absolute top-50 start-50 translate-middle"
             alt=""
           />
         )}

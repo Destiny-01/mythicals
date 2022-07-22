@@ -50,6 +50,8 @@ export default function Arena() {
         console.log("nn");
         setIsGameEnded(true);
         return;
+      } else {
+        setIsGameStarted(true);
       }
       let sol = 0;
       const player =
@@ -178,7 +180,7 @@ export default function Arena() {
   console.log(myStatus, opponentStatus, oppSol);
 
   return (
-    <div class="position-relative" style={{ minHeight: "100vh" }}>
+    <div className="position-relative" style={{ minHeight: "100vh" }}>
       <Container>
         <NavbarWrapper />
         <WinGame

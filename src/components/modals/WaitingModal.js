@@ -56,7 +56,7 @@ export default function WaitingModal({ code, submit }) {
             />
             <CopyToClipboard text={code}>
               <Button onClick={onClick}>
-                <i class={"bi " + data.icon}></i>
+                <i className={"bi " + data.icon}></i>
               </Button>
             </CopyToClipboard>
           </InputGroup>

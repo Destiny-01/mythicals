@@ -20,6 +20,7 @@ export const metamaskConnect = () => {
         changeChainId();
         return;
       }
+      localStorage.setItem("_metamask", accounts[0]);
       setTimeout(() => {
         window.location.reload();
       }, 2000);
