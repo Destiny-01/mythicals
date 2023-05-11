@@ -115,6 +115,13 @@ h2 {
   background: var(--card);
 }
 
+.card-img-top {
+  height: 290px;
+}
+.active .card-img-top {
+  height: 300px;
+}
+
 .card.gamecard {
   border: 9px solid #21212f;
   cursor: not-allowed;
@@ -167,6 +174,10 @@ h5 {
   font-family: "PT Serif", serif;
 }
 
+.modal-title {
+  font-family: "Open Sans", sans-serif;
+}
+
 .guesses {
   max-height: 300px;
   overflow-x: hidden;
@@ -176,6 +187,7 @@ h5 {
 
 .loggedin {
   background-color: var(--card);
+  cursor: pointer;
   padding: 8px 16px;
   border-radius: 13px;
 }
@@ -185,8 +197,27 @@ h5 {
   width: 0px;
 }
 
-.keyboard .cell {
+.keyboard {
+  padding: 0;
+}
+
+.keyboard .g-2 {
+  margin-right: calc(-0.5 * 4px);
+  margin-left: calc(-0.5 * 4px);
+}
+
+.key {
   cursor: pointer;
+  padding-right: calc(4px * 0.5);
+  padding-left: calc(4px * 0.5);
+}
+
+.selectcard .card-body {
+  padding: 1rem 0rem;
+}
+
+.cell {
+  width: 56px;
 }
 
 .selectcard {
@@ -235,4 +266,38 @@ h5 {
   opacity: 0.3;
   pointer-events: none;
   cursor: not-allowed;
+}
+
+.edit-btn {
+  background-color: transparent;
+  color: #f4d1c8;
+  border: 2px solid #f4d1c8;
+  border-radius: 13px;
+  padding: 15px 30px 15px 30px;
+}
+
+.edit-btn:disabled {
+  color: #c3c3c333;
+  border: 2px solid #c3c3c333;
+}
+
+.timer {
+  text-align: center;
+  margin: 12px;
+  font-size: 18px;
+}
+
+.timer .text {
+  font-size: 12px;
+}
+
+@media only screen and (max-width: 768px) {
+  .key > img {
+    width: 40px;
+    height: 52px;
+  }
+  .cell,
+  .cell > img {
+    width: 44px;
+  }
 }

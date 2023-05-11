@@ -3,16 +3,41 @@ import { Button, ModalBody, Modal, Container, Row, Col } from "reactstrap";
 import LogoRound from "../../assets/LogoRound.svg";
 import Metamask from "../../assets/logos/Metamask.svg";
 import WalletConnect from "../../assets/logos/WalletConnect.svg";
-import { metamaskConnect, walletConnect } from "../../utils/connect";
+import NoWallet from "../../assets/logos/no-wallet.png";
+import {
+  burnerWallet,
+  metamaskConnect,
+  walletConnect,
+} from "../../utils/connect";
+import UsernameModal from "./UsernameModal";
 
-export default function SelectWallet() {
-  const [isToggled, setIsToggled] = useState(false);
+export default function SelectWallet({ button }) {
+  const [isToggled, setIsToggled] = useState(button || false);
+  const [isModalToggled, setIsModalToggled] = useState(false);
+  const connectMetamask = async () => {
+    metamaskConnect().then((success) => {
+      if (success) {
+        setIsToggled(false);
+        setIsModalToggled(true);
+      }
+    });
+  };
+  const connectBurner = async () => {
+    burnerWallet().then((success) => {
+      if (success) {
+        setIsToggled(false);
+        setIsModalToggled(true);
+      }
+    });
+  };
 
   return (
     <div>
-      <Button onClick={() => setIsToggled(!isToggled)} className="mx-auto">
-        Connect Wallet
-      </Button>
+      {!button && (
+        <Button onClick={() => setIsToggled(!isToggled)} className="mx-auto">
+          Connect Wallet
+        </Button>
+      )}
       <Modal
         isOpen={isToggled}
         toggle={() => setIsToggled(!isToggled)}
@@ -29,7 +54,7 @@ export default function SelectWallet() {
             <Row>
               <Col
                 className="text-center"
-                onClick={metamaskConnect}
+                onClick={connectMetamask}
                 style={{ cursor: "pointer" }}
               >
                 <img
@@ -53,10 +78,29 @@ export default function SelectWallet() {
                 <p className="mb-0">Wallet Connect</p>
                 <p className="caption text-grey">Recommended for mobile</p>
               </Col>
+              <Col
+                className="text-center"
+                onClick={connectBurner}
+                style={{ cursor: "pointer" }}
+              >
+                <img
+                  src={NoWallet}
+                  alt=""
+                  height={64}
+                  width={60}
+                  className="img-fluid rounded-circle mx-auto d-block mb-3 "
+                />
+                <p className="mb-0">No wallet?</p>
+                <p className="caption text-grey">Create a burner wallet</p>
+              </Col>
             </Row>
           </Container>
         </ModalBody>
       </Modal>
+      <UsernameModal
+        isToggled={isModalToggled}
+        setIsToggled={setIsModalToggled}
+      />
     </div>
   );
 }

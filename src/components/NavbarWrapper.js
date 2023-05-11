@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
+  Button,
   Collapse,
   Nav,
   Navbar,
@@ -12,23 +13,40 @@ import Logo from "../assets/Logo.svg";
 import { useLocation } from "react-router-dom";
 import SelectWallet from "./modals/SelectWallet";
 import Avatar1 from "../assets/Avatar1.png";
-// import { testnet } from "../utils/chains";
 
 export default function NavbarWrapper() {
   const [isToggled, setIsToggled] = useState(false);
+  const [logoutToggle, setLogoutToggle] = useState(false);
   const [address, setAddress] = useState("");
+  const disconnect = () => {
+    localStorage.removeItem("_metamask");
+    sessionStorage.removeItem("address");
+    sessionStorage.removeItem("pk");
+    setAddress("");
+  };
+  let location = useLocation();
+
   useEffect(() => {
+    if (!window.ethereum) {
+      if (window.ethereum.selectedAddress) {
+        setAddress(window.ethereum.selectedAddress);
+      } else {
+        sessionStorage.getItem("address") &&
+          setAddress(sessionStorage.getItem("address"));
+      }
+    }
     window.ethereum.request({ method: "eth_accounts" }).then((accounts) => {
-      // window.ethereum.request({ method: "eth_chainId" }).then((chainId) => {
-      //   if (accounts.length > 0 && chainId !== testnet.chainId) {
-      //     return alert("Connect to harmony chain");
-      //   }
-      // });
       accounts.length > 0 && setAddress(accounts[0]);
-      localStorage.setItem("_metamask", accounts[0]);
+      if (window.ethereum.selectedAddress) {
+        setAddress(window.ethereum.selectedAddress);
+      } else {
+        sessionStorage.getItem("address") &&
+          setAddress(sessionStorage.getItem("address"));
+      }
+      !localStorage.getItem("_metamask") &&
+        localStorage.setItem("_metamask", accounts[0]);
     });
   }, []);
-  let location = useLocation();
 
   return (
     <div>
@@ -61,15 +79,31 @@ export default function NavbarWrapper() {
           </Nav>
           <Nav className={`${location.pathname === "/" ? "ms-0" : "ms-auto"}`}>
             {address ? (
-              <div className="loggedin cad d-flex align-items-center">
-                <div className="">
-                  <img src={Avatar1} alt="" className="me-2" />
-                </div>
+              <>
+                <div
+                  className="loggedin cad d-flex align-items-center"
+                  onClick={() => setLogoutToggle(!logoutToggle)}
+                >
+                  <div className="">
+                    <img src={Avatar1} alt="" className="me-2" />
+                  </div>
 
-                <p className="m-0">
-                  {address.slice(0, 5)}...{address.slice(-5)}
-                </p>
-              </div>
+                  <p className="m-0">
+                    {address.slice(0, 5)}...{address.slice(-5)}
+                  </p>
+                </div>
+                <Collapse isOpen={logoutToggle} horizontal>
+                  <Button
+                    style={{ marginLeft: "8px" }}
+                    onClick={() => {
+                      disconnect();
+                      setLogoutToggle(false);
+                    }}
+                  >
+                    Disconnect
+                  </Button>
+                </Collapse>
+              </>
             ) : (
               <SelectWallet />
             )}

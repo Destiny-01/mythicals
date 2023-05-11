@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from "react";
-import { Button, ModalBody, ModalFooter, ModalHeader, Modal } from "reactstrap";
-import LogoRound from "../../assets/LogoRound.svg";
+import { Button, ModalBody, ModalHeader, Modal } from "reactstrap";
 
 export default function HowToPlay() {
   const [isToggled, setIsToggled] = useState(false);

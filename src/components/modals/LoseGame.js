@@ -18,7 +18,7 @@ export default function LoseGame({ isOpen, onClose }) {
           <p className="caption text-center">
             Your Opponent has guessed your eggs correctly. Don't worry,
             challenge him again and show him who is boss this time. Minimize to
-            see his solution
+            see his solution in the "My guesses section"
           </p>
           <Link to="/game">
             <Button className="mb-0">Play again</Button>

@@ -5,11 +5,24 @@ import Keyboard from "../components/keyboard/Keyboard";
 import LogoRound from "../assets/LogoRound.svg";
 import { CurrentRow } from "../components/grid/CurrentRow";
 import WaitingModal from "../components/modals/WaitingModal";
-import { useLocation } from "react-router-dom";
-import { startGame } from "../utils/contract";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import EditGameSettings from "../components/modals/EditGameSettings";
 
-export default function SelectEgg() {
+export default function SelectEgg({ socket }) {
   const [currentGuess, setCurrentGuess] = useState("");
+  const [time, setTime] = useState(20);
+  const navigate = useNavigate();
+  let query = useQuery();
+  const [code, setCode] = useState(query.get("code") || "");
+
+  useEffect(() => {
+    socket.on("init", (id, gameCode) => {
+      if ((id === 1 && query.get("code")) || (id === 2 && !query.get("code"))) {
+        navigate("/room/" + gameCode);
+      }
+    });
+  }, [navigate, query, socket]);
 
   const isTurn = true;
 
@@ -18,10 +31,6 @@ export default function SelectEgg() {
 
     return React.useMemo(() => new URLSearchParams(search), [search]);
   }
-
-  let query = useQuery();
-
-  const [code, setCode] = useState(query.get("code") || "");
 
   const onChar = (value) => {
     if (currentGuess.length < 5) {
@@ -41,24 +50,28 @@ export default function SelectEgg() {
       });
     if (
       currentGuess.length !== 5 ||
+      !window.location.pathname.startsWith("/egg") ||
       !guessArr.every((e, i, a) => a.indexOf(e) === i)
     ) {
       return;
     }
-    startGame(
-      code,
-      currentGuess,
-      guessArr[0],
-      guessArr[1],
-      guessArr[2],
-      guessArr[3],
-      guessArr[4],
-      query.get("code") ? "create" : "join"
-    );
+
+    window.ethereum.request({ method: "eth_accounts" }).then((accounts) => {
+      if (accounts.length === 0 && !sessionStorage.getItem("address")) {
+        return;
+      }
+      socket.emit(
+        query.get("code") ? "newGame" : "joinGame",
+        code,
+        currentGuess,
+        accounts[0] || sessionStorage.getItem("address"),
+        time
+      );
+    });
   };
 
-  const onSubmit = (code) => {
-    code && setCode(code);
+  const onSubmit = (inpCode) => {
+    inpCode && setCode(inpCode);
   };
 
   return (
@@ -89,7 +102,17 @@ export default function SelectEgg() {
           </Col>
           <Col md="3"></Col>
         </Row>
-        <WaitingModal code={query.get("code")} submit={onSubmit} />
+        <div className="text-center mt-4">
+          <p>
+            <span style={{ color: "#C3C3C3" }}>Round Time:</span>
+            <span className="ms-3">{time}s</span>
+          </p>
+          <EditGameSettings
+            time={time}
+            setTime={setTime}
+            disabled={query.get("code") === null}
+          />
+        </div>
         <Keyboard
           onChar={onChar}
           onDelete={onDelete}
@@ -97,6 +120,7 @@ export default function SelectEgg() {
           isTurn={isTurn}
           currentGuess={currentGuess}
         />
+        <WaitingModal code={query.get("code")} submit={onSubmit} />
       </Container>
     </div>
   );

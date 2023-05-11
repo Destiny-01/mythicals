@@ -21,7 +21,7 @@ function Home() {
             THEY KILL YOURS
           </h1>
           <h4 className="mb-3">
-            Find and kill opponent’s pet ceatures in our fun online PVP game and
+            Find and kill opponent's pet ceatures in our fun online PVP game and
             earn tokes and <br />
             rewards when you win big games
           </h4>

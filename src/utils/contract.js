@@ -9,39 +9,6 @@ const address = "0xf3789DE4a687F81A05315f17e8bD6236aEb83887"; //devnet
 export const contract = new ethers.Contract(address, Dead.abi, signer);
 console.log(contract);
 
-export const startGame = (
-  id,
-  solution,
-  sol1,
-  sol2,
-  sol3,
-  sol4,
-  sol5,
-  action
-) => {
-  const salt = ethers.utils.randomBytes(16).join("2");
-  console.log(id, solution, sol1, action);
-  if (action === "create") {
-    contract
-      .startGame(id, salt, solution, sol1, sol2, sol3, sol4, sol5)
-      .then((res) => {
-        res.wait().then(() => {
-          window.location.href = `/room/${id}`;
-        });
-      })
-      .catch((err) => console.log(err));
-  } else {
-    contract
-      .joinGame(id, salt, solution, sol1, sol2, sol3, sol4, sol5)
-      .then((res) => {
-        res.wait().then(() => {
-          window.location.href = `/room/${id}`;
-        });
-      })
-      .catch((err) => console.log(err));
-  }
-};
-
 export const mintNFT = async (id, guess) => {
   try {
     const res = await contract.won(id, guess);

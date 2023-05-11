@@ -1,13 +1,13 @@
-import egg1 from "../assets/eggs/egg1.svg";
-import egg2 from "../assets/eggs/egg2.svg";
-import egg3 from "../assets/eggs/egg3.svg";
-import egg4 from "../assets/eggs/egg4.svg";
-import egg5 from "../assets/eggs/egg5.svg";
-import egg6 from "../assets/eggs/egg6.svg";
-import egg7 from "../assets/eggs/egg7.svg";
-import egg8 from "../assets/eggs/egg8.svg";
-import egg9 from "../assets/eggs/egg9.svg";
-import egg10 from "../assets/eggs/egg10.svg";
+import egg1 from "../assets/eggs/egg1.png";
+import egg2 from "../assets/eggs/egg2.png";
+import egg3 from "../assets/eggs/egg3.png";
+import egg4 from "../assets/eggs/egg4.png";
+import egg5 from "../assets/eggs/egg5.png";
+import egg6 from "../assets/eggs/egg6.png";
+import egg7 from "../assets/eggs/egg7.png";
+import egg8 from "../assets/eggs/egg8.png";
+import egg9 from "../assets/eggs/egg9.png";
+import egg10 from "../assets/eggs/egg10.png";
 
 export const eggsArray = [
   {

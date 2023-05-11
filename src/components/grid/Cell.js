@@ -19,7 +19,7 @@ export function Cell({ id, state }) {
   ];
 
   return (
-    <Col className="position-relative cell mx-2" style={{ width: "56px" }}>
+    <Col className="position-relative cell mx-2">
       {state === "unknown" ? (
         <img src={eggUnknown} alt="" />
       ) : state !== "default" ? (

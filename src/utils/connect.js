@@ -1,10 +1,11 @@
 import WalletConnectProvider from "@walletconnect/web3-provider";
-import { providers } from "ethers";
+import axios from "axios";
+import { providers, Wallet } from "ethers";
 import { devnet } from "./chains";
 
 const chain = devnet;
 const { ethereum } = window;
-export const metamaskConnect = () => {
+export const metamaskConnect = async () => {
   if (!ethereum) {
     window
       .open(
@@ -14,19 +15,25 @@ export const metamaskConnect = () => {
       .focus();
     return;
   }
-  ethereum.request({ method: "eth_requestAccounts" }).then((accounts) => {
-    ethereum.request({ method: "eth_chainId" }).then((chainId) => {
-      if (chainId !== chain.chainId) {
-        changeChainId();
-        return;
-      }
-      localStorage.setItem("_metamask", accounts[0]);
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
-      console.log(accounts[0]);
-    });
+  const accounts = await ethereum.request({ method: "eth_requestAccounts" });
+  const chainId = await ethereum.request({ method: "eth_chainId" });
+
+  if (chainId !== chain.chainId) {
+    const rAccounts = await changeChainId();
+    return rAccounts || null;
+  }
+  localStorage.setItem("_metamask", accounts[0]);
+  const res = await axios.post("http://localhost:8000/api/connect", {
+    address: accounts[0],
   });
+  console.log(res);
+  if (res.data.data) {
+    return accounts[0];
+  }
+  setTimeout(() => {
+    window.location.reload();
+  }, 1000);
+  console.log(accounts[0]);
 };
 
 export const walletConnect = async () => {
@@ -86,7 +93,26 @@ const changeChainId = async () => {
     method: "eth_requestAccounts",
   });
   localStorage.setItem("_metamask", accounts[0]);
+  const res = await axios.post("http://localhost:8000/api/connect", {
+    address: accounts[0],
+  });
+  if (res.data.data) {
+    return accounts[0];
+  }
   setTimeout(() => {
     window.location.reload();
-  }, 2000);
+  }, 1000);
+};
+
+export const burnerWallet = async () => {
+  const { address, privateKey } = Wallet.createRandom();
+
+  const res = await axios.post("http://localhost:8000/api/connect", {
+    address,
+  });
+  sessionStorage.setItem("address", address);
+  sessionStorage.setItem("pk", privateKey);
+  if (res.data.data) {
+    return address;
+  }
 };

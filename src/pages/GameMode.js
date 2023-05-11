@@ -15,7 +15,7 @@ import Game2 from "../assets/Game2.png";
 import Game3 from "../assets/Game3.png";
 import SelectGame from "../components/modals/SelectGame";
 
-export default function gameMode() {
+export default function GameMode() {
   return (
     <div>
       <Container>

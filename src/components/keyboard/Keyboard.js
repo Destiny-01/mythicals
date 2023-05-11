@@ -7,10 +7,12 @@ import { Link } from "react-router-dom";
 export default function Keyboard({
   onChar,
   onDelete,
+  guesses,
   onEnter,
   currentGuess,
   isTurn,
   isGameEnded,
+  isGameStarted,
 }) {
   const onClick = (id) => {
     if (id === "submit") {
@@ -24,7 +26,15 @@ export default function Keyboard({
 
   return (
     <Container className="keyboard  mb-3 position-absolute bottom-0 start-50 translate-middle-x">
-      <div className={!isTurn || isGameEnded ? "disabledKey" : ""}>
+      <div
+        className={
+          !isTurn ||
+          isGameEnded ||
+          (!isGameStarted && !isGameEnded && guesses !== undefined)
+            ? "disabledKey"
+            : ""
+        }
+      >
         <Row className="row-cols-auto mb-2  justify-content-center g-2">
           {eggsArray.slice(0, 3).map((egg) => {
             return (
@@ -71,13 +81,24 @@ export default function Keyboard({
           <Key id="delete" state="default" onClick={onClick} />
         </Row>
       </div>
-      {!isTurn && !isGameEnded && (
+      {!isGameStarted && !isGameEnded && guesses !== undefined ? (
         <Row className="text-center position-absolute top-50 start-50 translate-middle ">
-          <p className="mb-0">It's opponent's turn to play</p>
+          <p className="mb-0">Waiting for your opponent to join</p>
           <p className="caption">
-            Please wait for your opponent to finish guessing
+            Please wait for your opponent to join the game. Hope you've shared
+            him the code
           </p>
         </Row>
+      ) : (
+        !isTurn &&
+        !isGameEnded && (
+          <Row className="text-center position-absolute top-50 start-50 translate-middle ">
+            <p className="mb-0">It's opponent's turn to play</p>
+            <p className="caption">
+              Please wait for your opponent to finish guessing
+            </p>
+          </Row>
+        )
       )}
       {isGameEnded && (
         <Row className="text-center position-absolute top-50 start-50 translate-middle ">

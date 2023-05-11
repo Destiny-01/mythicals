@@ -9,7 +9,7 @@ export default function ConfirmModal({ isOpen }) {
           <p className="mb-0">Waiting for verification</p>
           <p className="caption">
             please confirm transaction in metamask. Popup usually takes around
-            10-30 seconds to appear
+            some seconds to appear
           </p>
         </div>
       </Modal>

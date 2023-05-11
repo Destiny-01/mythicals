@@ -16,7 +16,7 @@ export function Key({ id, image, onClick, currentGuess }) {
     return guessArr.some((guess) => guess === id);
   };
   return (
-    <Col style={{ cursor: "pointer" }}>
+    <Col className="key">
       {id && id === "delete" ? (
         <img src={deleteButton} alt="" onClick={() => onClick(id)} />
       ) : id && id === "submit" ? (

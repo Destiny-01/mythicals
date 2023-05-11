@@ -23,7 +23,7 @@ export const testnet = {
 };
 
 export const devnet = {
-  chainId: "0x635AE020",
+  chainId: "0x635ae020",
   chainName: "Harmony Devnet",
   nativeCurrency: {
     name: "ONE",
