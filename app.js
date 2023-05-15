@@ -1,102 +1,90 @@
 const express = require("express");
-const snarkjs = require("snarkjs");
-const cors = require("cors");
-
 const app = express();
+const http = require("http").Server(app);
+const cors = require("cors");
+const axios = require("axios");
+const db = require("./db");
+const {
+  createGame,
+  joinGame,
+  guessCode,
+  checkCode,
+  createCode,
+  getGame,
+} = require("./controllers/gameController");
+const {
+  connectWallet,
+  updateUsername,
+} = require("./controllers/playerController");
+const io = require("socket.io")(http, {
+  cors: {
+    origin: ["https://myth-arena.netlify.app", "http://localhost:3000"],
+  },
+});
 
-function calc(result) {
-  let response = [];
-  const solution = [];
-  const arr = ["0", "1", "2", "3", "4"];
-
-  if (result.length < 1) {
-    return (response = ["60", "61", "62", "63", "64"]);
-  }
-  if (result.length === 5) {
-    return (response = result);
-  }
-
-  result.forEach((soln) => {
-    if (response.length < 6) {
-      response.push(soln);
-      const solnMap = soln.split("");
-      solution.push(solnMap[1]);
-    }
-  });
-  const filter = arr.filter((x) => !solution.includes(x));
-  filter.forEach((fil) => response.length < 6 && response.push("6" + fil));
-
-  return response;
-}
-
-function unstringifyBigInts(o) {
-  if (typeof o == "string" && /^[0-9]+$/.test(o)) {
-    return BigInt(o);
-  } else if (typeof o == "string" && /^0x[0-9a-fA-F]+$/.test(o)) {
-    return BigInt(o);
-  } else if (Array.isArray(o)) {
-    return o.map(unstringifyBigInts);
-  } else if (typeof o == "object") {
-    if (o === null) return null;
-    const res = {};
-    const keys = Object.keys(o);
-    keys.forEach((k) => {
-      res[k] = unstringifyBigInts(o[k]);
-    });
-    return res;
-  } else {
-    return o;
-  }
-}
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
-app.post("/proof", async (req, res) => {
-  try {
-    const { guess, solution, hash, salt } = req.body;
-    console.log(req.body);
+app.post("/code", createCode);
+app.post("/game/:id", getGame);
+app.post("/check-code", checkCode);
+app.post("/create", createGame);
+app.post("/join", joinGame);
+app.post("/guess", guessCode);
+app.post("/connect", connectWallet);
+app.post("/username", updateUsername);
 
-    const { proof, publicSignals } = await snarkjs.groth16.fullProve(
-      {
-        guess,
-        solution,
-        saltedSolution: salt,
-        hashedSolution: hash,
-      },
-      "Dead.wasm",
-      "Dead_0001.zkey"
-    );
-    console.log("suspect");
-    console.log(publicSignals);
-    const editedPublicSignals = unstringifyBigInts(publicSignals);
-    const editedProof = unstringifyBigInts(proof);
-    const calldat = await snarkjs.groth16.exportSolidityCallData(
-      editedProof,
-      editedPublicSignals
-    );
+io.on("connection", (client) => {
+  console.log(`⚡: ${client.id} user just connected!`);
+  client.on("disconnect", () => {
+    console.log("🔥: A user disconnected");
+  });
+  client.on("leave", (room) => {
+    client.leave(room);
+    console.log(`Client ${client.id} left room ${room}`);
+  });
+  client.on("newGame", handleNewGame);
+  client.on("joinGame", handleJoinGame);
+  client.on("guess", handleGuess);
 
-    const calldata = calldat
-      .replace(/["[\]\s]/g, "")
-      .split(",")
-      .map((x) => BigInt(x).toString());
-    const input = [
-      [calldata[0], calldata[1]],
-      [
-        [calldata[2], calldata[3]],
-        [calldata[4], calldata[5]],
-      ],
-      [calldata[6], calldata[7]],
-      calldata.splice(8),
-    ];
-    const result = publicSignals.filter((signal) => signal.length === 2);
-    const response = calc(result);
+  const handleGuess = (id, guess, address) => {
+    axios
+      .post("http://localhost:8000/api/guess", { id, guess, address })
+      .then((res) => {
+        client.emit("myGuess", res.data.data);
+        client.broadcast.emit("opponentGuess", res.data.data);
+        if (res.data.data.winner) {
+          client.emit("wonGame", res.data.data);
+          client.broadcast.emit("lostGame", res.data.data);
+        }
+      })
+      .catch((err) => console.log(err.message));
+  };
 
-    return res.status(200).json({ response, input });
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json({ message: err.message });
-  }
+  const handleNewGame = (id, solution, address, time) => {
+    axios
+      .post("http://localhost:8000/api/create", { id, solution, address, time })
+      .then((res) => {
+        client.join(id);
+        client.emit("init", 1, id);
+      })
+      .catch((err) => console.log(err.message));
+  };
+
+  const handleJoinGame = (id, solution, address) => {
+    axios
+      .post("http://localhost:8000/api/join", { id, solution, address })
+      .then((res) => {
+        client.join(id);
+        client.emit("init", 2, id);
+        client.broadcast.to(id).emit("joined", res.data.data);
+      });
+  };
 });
 
 const PORT = process.env.PORT || 8000;
-app.listen(PORT, () => console.log(`Server is listening on port ${PORT}`));
+http.listen(PORT, () => {
+  db();
+  console.log(`Server is listening on port ${PORT}`);
+});
