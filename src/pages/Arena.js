@@ -94,7 +94,7 @@ export default function Arena({ socket }) {
   useEffect(() => {
     window.ethereum.request({ method: "eth_accounts" }).then((accounts) => {
       axios
-        .post("http://localhost:8000/api/game/" + id, {
+        .post("https://myth-arena.herokuapp.com/api/game/" + id, {
           address:
             (accounts.length > 0 || sessionStorage.getItem("address")) &&
             (accounts[0] || sessionStorage.getItem("address")),

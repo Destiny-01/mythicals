@@ -96,7 +96,7 @@ export const guessCode = async (id, guess) => {
         salt,
       }),
     };
-    const data = await fetch("http://localhost:8000/proof", options);
+    const data = await fetch("https://myth-arena.herokuapp.com/proof", options);
     const { input, response } = await data.json();
     const tx = await contract.guessCode(
       id,

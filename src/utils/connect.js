@@ -23,7 +23,7 @@ export const metamaskConnect = async () => {
     return rAccounts || null;
   }
   localStorage.setItem("_metamask", accounts[0]);
-  const res = await axios.post("http://localhost:8000/api/connect", {
+  const res = await axios.post("https://myth-arena.herokuapp.com/api/connect", {
     address: accounts[0],
   });
   console.log(res);
@@ -93,7 +93,7 @@ const changeChainId = async () => {
     method: "eth_requestAccounts",
   });
   localStorage.setItem("_metamask", accounts[0]);
-  const res = await axios.post("http://localhost:8000/api/connect", {
+  const res = await axios.post("https://myth-arena.herokuapp.com/api/connect", {
     address: accounts[0],
   });
   if (res.data.data) {
@@ -107,7 +107,7 @@ const changeChainId = async () => {
 export const burnerWallet = async () => {
   const { address, privateKey } = Wallet.createRandom();
 
-  const res = await axios.post("http://localhost:8000/api/connect", {
+  const res = await axios.post("https://myth-arena.herokuapp.com/api/connect", {
     address,
   });
   sessionStorage.setItem("address", address);

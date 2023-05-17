@@ -23,7 +23,7 @@ export default function WaitingModal({ code, submit }) {
   const onClick = () => {
     if (!code) {
       axios
-        .post("http://localhost:8000/api/check-code", {
+        .post("https://myth-arena.herokuapp.com/api/check-code", {
           address,
           code: inpCode,
         })

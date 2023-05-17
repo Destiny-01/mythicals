@@ -9,7 +9,7 @@ export default function UsernameModal({ isToggled, setIsToggled }) {
       return;
     }
     axios
-      .post("http://localhost:8000/api/username", {
+      .post("https://myth-arena.herokuapp.com/api/username", {
         address:
           window.ethereum.selectedAddress || sessionStorage.getItem("address"),
         username,

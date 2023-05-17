@@ -21,7 +21,7 @@ export default function SelectGame() {
             id > 1
               ? navigate("/egg")
               : axios
-                  .post("http://localhost:8000/api/code", {
+                  .post("https://myth-arena.herokuapp.com/api/code", {
                     address: sessionStorage.getItem("address"),
                   })
                   .then((res) => {
@@ -35,7 +35,7 @@ export default function SelectGame() {
           id > 1
             ? navigate("/egg")
             : axios
-                .post("http://localhost:8000/api/code", {
+                .post("https://myth-arena.herokuapp.com/api/code", {
                   address: accounts[0],
                 })
                 .then((res) => {
