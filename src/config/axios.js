@@ -1,4 +1,4 @@
-import axios from "../config/axios";
+import axios from "axios";
 
 const instance = axios.create({ baseURL: "https://mythicals.onrender.com" });
 
