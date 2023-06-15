@@ -44,9 +44,6 @@ io.on("connection", (client) => {
     client.leave(room);
     console.log(`Client ${client.id} left room ${room}`);
   });
-  client.on("newGame", handleNewGame);
-  client.on("joinGame", handleJoinGame);
-  client.on("guess", handleGuess);
 
   const handleGuess = (id, guess, address) => {
     axios
@@ -81,6 +78,10 @@ io.on("connection", (client) => {
         client.broadcast.to(id).emit("joined", res.data.data);
       });
   };
+  
+  client.on("newGame", handleNewGame);
+  client.on("joinGame", handleJoinGame);
+  client.on("guess", handleGuess);
 });
 
 const PORT = process.env.PORT || 8000;
