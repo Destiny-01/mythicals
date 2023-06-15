@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, ModalBody, Modal } from "reactstrap";
 import LogoRound from "../../assets/LogoRound.svg";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios from "../../config/axios";
 import SelectWallet from "./SelectWallet";
 
 export default function SelectGame() {
@@ -21,7 +21,7 @@ export default function SelectGame() {
             id > 1
               ? navigate("/egg")
               : axios
-                  .post("https://myth-arena.herokuapp.com/api/code", {
+                  .post("https://mythicals.onrender.com/api/code", {
                     address: sessionStorage.getItem("address"),
                   })
                   .then((res) => {
@@ -35,7 +35,7 @@ export default function SelectGame() {
           id > 1
             ? navigate("/egg")
             : axios
-                .post("https://myth-arena.herokuapp.com/api/code", {
+                .post("https://mythicals.onrender.com/api/code", {
                   address: accounts[0],
                 })
                 .then((res) => {

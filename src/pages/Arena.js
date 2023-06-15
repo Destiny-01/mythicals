@@ -7,7 +7,7 @@ import { Grid } from "../components/grid/Grid";
 import { useParams } from "react-router-dom";
 import WinGame from "../components/modals/WinGame";
 import LoseGame from "../components/modals/LoseGame";
-import axios from "axios";
+import axios from "../config/axios";
 import Timer from "../components/Timer";
 
 export default function Arena({ socket }) {
@@ -94,7 +94,7 @@ export default function Arena({ socket }) {
   useEffect(() => {
     window.ethereum.request({ method: "eth_accounts" }).then((accounts) => {
       axios
-        .post("https://myth-arena.herokuapp.com/api/game/" + id, {
+        .post("https://mythicals.onrender.com/api/game/" + id, {
           address:
             (accounts.length > 0 || sessionStorage.getItem("address")) &&
             (accounts[0] || sessionStorage.getItem("address")),

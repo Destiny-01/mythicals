@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../../config/axios";
 import React, { useState } from "react";
 import { Button, Modal, InputGroup, Input } from "reactstrap";
 
@@ -9,7 +9,7 @@ export default function UsernameModal({ isToggled, setIsToggled }) {
       return;
     }
     axios
-      .post("https://myth-arena.herokuapp.com/api/username", {
+      .post("https://mythicals.onrender.com/api/username", {
         address:
           window.ethereum.selectedAddress || sessionStorage.getItem("address"),
         username,

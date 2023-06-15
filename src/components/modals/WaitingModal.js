@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Modal, InputGroup, Input } from "reactstrap";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import axios from "axios";
+import axios from "../../config/axios";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
@@ -23,7 +23,7 @@ export default function WaitingModal({ code, submit }) {
   const onClick = () => {
     if (!code) {
       axios
-        .post("https://myth-arena.herokuapp.com/api/check-code", {
+        .post("https://mythicals.onrender.com/api/check-code", {
           address,
           code: inpCode,
         })
