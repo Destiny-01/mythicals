@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Col, Container, Row } from "reactstrap";
 import NavbarWrapper from "../components/NavbarWrapper";
 import Keyboard from "../components/keyboard/Keyboard";
-import { mintNFT } from "../utils/contract";
+// import { mintNFT } from "../utils/contract";
 import { Grid } from "../components/grid/Grid";
 import { useParams } from "react-router-dom";
 import WinGame from "../components/modals/WinGame";
@@ -177,11 +177,11 @@ export default function Arena({ socket }) {
         <NavbarWrapper />
         <WinGame
           isOpen={isGameWon}
-          mint={() =>
-            mintNFT(id, isGameWon)
-              .then((res) => setIsGameWon(false))
-              .catch((err) => console.log(err))
-          }
+          mint={() => {}}
+          // mintNFT(id, isGameWon)
+          //   .then((res) => setIsGameWon(false))
+          //   .catch((err) => console.log(err))
+
           onClose={() => setIsGameWon(false)}
         />
         <LoseGame isOpen={isGameLost} onClose={() => setIsGameLost(false)} />
