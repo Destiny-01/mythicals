@@ -92,36 +92,44 @@ export default function Arena({ socket }) {
   }, [id, socket]);
 
   useEffect(() => {
-    window.ethereum.request({ method: "eth_accounts" }).then((accounts) => {
-      axios
-        .post("https://mythicals.onrender.com/api/game/" + id, {
-          address:
-            (accounts.length > 0 || sessionStorage.getItem("address")) &&
-            (accounts[0] || sessionStorage.getItem("address")),
-        })
-        .then((res) => {
-          if (res.data.data) {
-            const game = res.data.data;
-            const returnedPlayer = res.data.player;
-
-            setPlayers(game.players);
-            setTurn(game.turn === returnedPlayer);
-            setDuration(game.time);
-            game.active && game.players.length > 1 && setIsGameStarted(true);
-            if (!game.active && game.winner && returnedPlayer) {
-              game.winner === returnedPlayer
-                ? setIsGameWon(true)
-                : setIsGameLost(true);
-              setIsGameEnded(true);
-            }
-            ((!game.active && game.players.length === 1) || game.active) &&
-              setSolution(game.solution.player1 || game.solution.player2);
-          }
+    const fetchData = async () => {
+      try {
+        const accounts = await window.ethereum?.request({
+          method: "eth_accounts",
         });
-      setAddress(
-        accounts.length > 0 ? accounts[0] : sessionStorage.getItem("address")
-      );
-    });
+        const address =
+          accounts?.length > 0
+            ? accounts[0]
+            : sessionStorage.getItem("address");
+        const res = await axios.post("/game/" + id, {
+          address: address,
+        });
+
+        if (res.data.data) {
+          const game = res.data.data;
+          const returnedPlayer = res.data.player;
+
+          setPlayers(game.players);
+          setTurn(game.turn === returnedPlayer);
+          setDuration(game.time);
+          game.active && game.players.length > 1 && setIsGameStarted(true);
+
+          if (!game.active && game.winner && returnedPlayer) {
+            game.winner === returnedPlayer
+              ? setIsGameWon(true)
+              : setIsGameLost(true);
+            setIsGameEnded(true);
+          }
+
+          ((!game.active && game.players.length === 1) || game.active) &&
+            setSolution(game.solution.player1 || game.solution.player2);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchData();
   }, [id]);
 
   const onComplete = (t) => {
@@ -172,7 +180,7 @@ export default function Arena({ socket }) {
   };
 
   return (
-    <div className="position-relative" style={{ minHeight: "100vh" }}>
+    <div className="position-relative" style={{ height: "100dvh" }}>
       <Container>
         <NavbarWrapper />
         <WinGame
@@ -186,11 +194,11 @@ export default function Arena({ socket }) {
         />
         <LoseGame isOpen={isGameLost} onClose={() => setIsGameLost(false)} />
 
-        <Row className=" mx-md-5 mt-3">
+        <Row className="game-row mx-md-5 mt-3">
           <Grid
             player={players.find(
               (x) =>
-                x.address !== window.ethereum.selectedAddress ||
+                x.address !== window.ethereum?.selectedAddress ||
                 sessionStorage.getItem("address")
             )}
             guesses={myGuesses}
@@ -211,7 +219,7 @@ export default function Arena({ socket }) {
           <Grid
             player={players.find(
               (x) =>
-                x.address === window.ethereum.selectedAddress ||
+                x.address === window.ethereum?.selectedAddress ||
                 sessionStorage.getItem("address")
             )}
             guesses={opponentGuesses}

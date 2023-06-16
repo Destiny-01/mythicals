@@ -27,26 +27,25 @@ export default function NavbarWrapper() {
   let location = useLocation();
 
   useEffect(() => {
-    if (!window.ethereum) {
-      if (window.ethereum.selectedAddress) {
-        setAddress(window.ethereum.selectedAddress);
+    if (!address) {
+      if (window.ethereum) {
+        if (window.ethereum.selectedAddress) {
+          setAddress(window.ethereum.selectedAddress);
+        } else {
+          window.ethereum
+            .request({ method: "eth_accounts" })
+            .then((accounts) => {
+              accounts.length > 0 && setAddress(accounts[0]);
+              !localStorage.getItem("_metamask") &&
+                localStorage.setItem("_metamask", accounts[0]);
+            });
+        }
       } else {
         sessionStorage.getItem("address") &&
           setAddress(sessionStorage.getItem("address"));
       }
     }
-    window.ethereum.request({ method: "eth_accounts" }).then((accounts) => {
-      accounts.length > 0 && setAddress(accounts[0]);
-      if (window.ethereum.selectedAddress) {
-        setAddress(window.ethereum.selectedAddress);
-      } else {
-        sessionStorage.getItem("address") &&
-          setAddress(sessionStorage.getItem("address"));
-      }
-      !localStorage.getItem("_metamask") &&
-        localStorage.setItem("_metamask", accounts[0]);
-    });
-  }, []);
+  }, [address]);
 
   return (
     <div>

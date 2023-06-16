@@ -96,7 +96,7 @@
 //         salt,
 //       }),
 //     };
-//     const data = await fetch("https://mythicals.onrender.com/proof", options);
+//     const data = await fetch("/proof", options);
 //     const { input, response } = await data.json();
 //     const tx = await contract.guessCode(
 //       id,

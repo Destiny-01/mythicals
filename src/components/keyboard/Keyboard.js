@@ -82,7 +82,7 @@ export default function Keyboard({
         </Row>
       </div>
       {!isGameStarted && !isGameEnded && guesses !== undefined ? (
-        <Row className="text-center position-absolute top-50 start-50 translate-middle ">
+        <Row className="text-center w-100 position-absolute top-50 start-50 translate-middle ">
           <p className="mb-0">Waiting for your opponent to join</p>
           <p className="caption">
             Please wait for your opponent to join the game. Hope you've shared
@@ -92,7 +92,7 @@ export default function Keyboard({
       ) : (
         !isTurn &&
         !isGameEnded && (
-          <Row className="text-center position-absolute top-50 start-50 translate-middle ">
+          <Row className="text-center w-100 position-absolute top-50 start-50 translate-middle ">
             <p className="mb-0">It's opponent's turn to play</p>
             <p className="caption">
               Please wait for your opponent to finish guessing

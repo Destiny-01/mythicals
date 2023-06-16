@@ -9,10 +9,15 @@
   --card: #191d30;
 }
 
+html {
+  overflow: auto;
+}
+
 body {
   font-family: "Open Sans", sans-serif;
   background-color: var(--bg);
   color: var(--white);
+  overflow-x: hidden;
 }
 
 .nav-link {
@@ -115,11 +120,13 @@ h2 {
   background: var(--card);
 }
 
-.card-img-top {
-  height: 290px;
-}
-.active .card-img-top {
-  height: 300px;
+@media only screen and (min-width: 768px) {
+  .card-img-top {
+    height: 290px;
+  }
+  .active .card-img-top {
+    height: 300px;
+  }
 }
 
 .card.gamecard {
@@ -226,7 +233,7 @@ h5 {
 
 .waitingroom {
   background-image: url("./assets/WaitingBG.png");
-  min-height: 100vh;
+  height: 100dvh;
   background-size: contain;
   background-position: center center;
 }
@@ -299,5 +306,19 @@ h5 {
   .cell,
   .cell > img {
     width: 44px;
+  }
+  .card.gamecard {
+    margin-bottom: 24px;
+  }
+  .game-row {
+    flex-wrap: nowrap;
+    overflow: scroll;
+  }
+  .game-row .col-md-2 {
+    max-width: fit-content;
+  }
+
+  .guess {
+    min-width: 90vw;
   }
 }

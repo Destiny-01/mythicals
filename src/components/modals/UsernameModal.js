@@ -9,9 +9,9 @@ export default function UsernameModal({ isToggled, setIsToggled }) {
       return;
     }
     axios
-      .post("https://mythicals.onrender.com/api/username", {
+      .post("/username", {
         address:
-          window.ethereum.selectedAddress || sessionStorage.getItem("address"),
+          window.ethereum?.selectedAddress || sessionStorage.getItem("address"),
         username,
       })
       .then((res) => {

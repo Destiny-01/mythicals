@@ -13,17 +13,30 @@ export default function WaitingModal({ code, submit }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    window.ethereum.request({ method: "eth_accounts" }).then((accounts) => {
-      accounts.length > 0 || sessionStorage.getItem("address")
-        ? setAddress(accounts[0] || sessionStorage.getItem("address"))
-        : navigate("/game");
-    });
+    const fetchAccounts = async () => {
+      try {
+        const accounts = await window.ethereum?.request({
+          method: "eth_accounts",
+        });
+        if (accounts?.length > 0 || sessionStorage.getItem("address")) {
+          setAddress(
+            accounts ? accounts[0] : sessionStorage.getItem("address")
+          );
+        } else {
+          navigate("/game");
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchAccounts();
   }, [navigate]);
 
   const onClick = () => {
     if (!code) {
       axios
-        .post("https://mythicals.onrender.com/api/check-code", {
+        .post("/check-code", {
           address,
           code: inpCode,
         })

@@ -42,12 +42,13 @@ export default function SelectEgg({ socket }) {
     setCurrentGuess(currentGuess.slice(0, -1));
   };
 
-  const onEnter = () => {
+  const onEnter = async () => {
     const guessArr = String(currentGuess)
       .split("")
       .map((currentGuess) => {
         return Number(currentGuess);
       });
+
     if (
       currentGuess.length !== 5 ||
       !window.location.pathname.startsWith("/egg") ||
@@ -56,18 +57,26 @@ export default function SelectEgg({ socket }) {
       return;
     }
 
-    window.ethereum.request({ method: "eth_accounts" }).then((accounts) => {
-      if (accounts.length === 0 && !sessionStorage.getItem("address")) {
-        return;
-      }
-      socket.emit(
-        query.get("code") ? "newGame" : "joinGame",
-        code,
-        currentGuess,
-        accounts[0] || sessionStorage.getItem("address"),
-        time
-      );
-    });
+    const accounts = await window.ethereum?.request({ method: "eth_accounts" });
+
+    if (accounts?.length === 0 && !sessionStorage.getItem("address")) {
+      return;
+    }
+    console.log(
+      query.get("code") ? "newGame" : "joinGame",
+      code,
+      currentGuess,
+      accounts ? accounts[0] : sessionStorage.getItem("address"),
+      time
+    );
+
+    socket.emit(
+      query.get("code") ? "newGame" : "joinGame",
+      code,
+      currentGuess,
+      accounts ? accounts[0] : sessionStorage.getItem("address"),
+      time
+    );
   };
 
   const onSubmit = (inpCode) => {
@@ -75,7 +84,7 @@ export default function SelectEgg({ socket }) {
   };
 
   return (
-    <div className="position-relative" style={{ minHeight: "100vh" }}>
+    <div className="position-relative" style={{ height: "100dvh" }}>
       <Container>
         <NavbarWrapper />
         <p className="caption fst-italic text-end">Game ID: {code}</p>

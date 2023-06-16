@@ -22,7 +22,7 @@ export const Grid = ({
 
   return (
     <Col>
-      <div className="">
+      <div className="guess">
         <div className="d-flex align-center">
           <div className="">
             <img
@@ -35,7 +35,7 @@ export const Grid = ({
             <p className="mb-0 d-line">
               {ready ? (
                 (player &&
-                  player.address !== window.ethereum.selectedAddress) ||
+                  player.address !== window.ethereum?.selectedAddress) ||
                 sessionStorage.getItem("address") ? (
                   <Fragment>
                     {`Your Guesses (${player?.username || "player"})`}

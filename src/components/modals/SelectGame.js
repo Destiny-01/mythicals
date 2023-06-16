@@ -13,38 +13,36 @@ export default function SelectGame() {
 
   const handleCreate = async (id) => {
     setDisabled(id);
-    window.ethereum
-      .request({ method: "eth_accounts" })
-      .then((accounts) => {
-        if (accounts.length === 0) {
-          if (sessionStorage.getItem("address")?.length > 12) {
-            id > 1
-              ? navigate("/egg")
-              : axios
-                  .post("https://mythicals.onrender.com/api/code", {
-                    address: sessionStorage.getItem("address"),
-                  })
-                  .then((res) => {
-                    navigate("/egg?code=" + res.data.data);
-                  })
-                  .catch((err) => console.log(err));
-            return;
+    try {
+      const accounts = await window.ethereum?.request({
+        method: "eth_accounts",
+      });
+      if (!accounts || accounts.length === 0) {
+        if (sessionStorage.getItem("address")?.length > 12) {
+          if (id > 1) {
+            navigate("/egg");
+          } else {
+            const res = await axios.post("/code", {
+              address: sessionStorage.getItem("address"),
+            });
+            navigate("/egg?code=" + res.data.data);
           }
-          setUnAuthenticated(true);
         } else {
-          id > 1
-            ? navigate("/egg")
-            : axios
-                .post("https://mythicals.onrender.com/api/code", {
-                  address: accounts[0],
-                })
-                .then((res) => {
-                  navigate("/egg?code=" + res.data.data);
-                })
-                .catch((err) => console.log(err));
+          setUnAuthenticated(true);
         }
-      })
-      .catch((err) => console.log(err));
+      } else {
+        if (id > 1) {
+          navigate("/egg");
+        } else {
+          const res = await axios.post("/code", {
+            address: accounts[0],
+          });
+          navigate("/egg?code=" + res.data.data);
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
