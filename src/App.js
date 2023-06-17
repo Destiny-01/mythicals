@@ -6,9 +6,9 @@ import Home from "./pages/Home";
 import GameMode from "./pages/GameMode";
 import Arena from "./pages/Arena";
 import SelectEgg from "./pages/SelectEgg";
+import { SERVER_URL } from "./constants";
 
-const socket = socketIO.connect("http://localhost:8000");
-// const socket = socketIO.connect("https://mythicals.onrender.com");
+const socket = socketIO.connect(SERVER_URL);
 function App() {
   return (
     <BrowserRouter>
