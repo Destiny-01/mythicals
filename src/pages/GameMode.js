@@ -14,6 +14,8 @@ import Game1 from "../assets/Game1.png";
 import Game2 from "../assets/Game2.png";
 import Game3 from "../assets/Game3.png";
 import SelectGame from "../components/modals/SelectGame";
+import LogoRound from "../assets/LogoRound.svg";
+import LogoDefault from "../assets/LogoDefault.png";
 
 export default function GameMode() {
   return (
@@ -28,6 +30,11 @@ export default function GameMode() {
               <Card className="gamecard 1">
                 <CardImg alt="Card image cap" src={Game1} top width="100%" />
                 <CardBody>
+                  <img
+                    src={LogoDefault}
+                    alt=""
+                    className="game-mode-img img-fluid mb-3 "
+                  />
                   <CardTitle tag="p" className="mb-0">
                     Single player
                   </CardTitle>
@@ -39,6 +46,11 @@ export default function GameMode() {
               <Card className="gamecard active">
                 <CardImg alt="Card image cap" src={Game2} top width="100%" />
                 <CardBody>
+                  <img
+                    src={LogoRound}
+                    alt=""
+                    className="game-mode-img img-fluid mb-3 "
+                  />
                   <CardTitle tag="p" className="mb-0">
                     Multiplayer
                   </CardTitle>
@@ -50,6 +62,11 @@ export default function GameMode() {
               <Card className="gamecard">
                 <CardImg alt="Card image cap" src={Game3} top width="100%" />
                 <CardBody>
+                  <img
+                    src={LogoDefault}
+                    alt=""
+                    className="game-mode-img img-fluid mb-3 "
+                  />
                   <CardTitle tag="p" className="mb-0">
                     Tournament
                   </CardTitle>

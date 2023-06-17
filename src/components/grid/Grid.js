@@ -9,6 +9,7 @@ import { Fragment } from "react";
 
 export const Grid = ({
   player,
+  address,
   guesses,
   currentGuess,
   solution,
@@ -34,9 +35,7 @@ export const Grid = ({
           <div className="">
             <p className="mb-0 d-line">
               {ready ? (
-                (player &&
-                  player.address !== window.ethereum?.selectedAddress) ||
-                sessionStorage.getItem("address") ? (
+                player?.address !== address ? (
                   <Fragment>
                     {`Your Guesses (${player?.username || "player"})`}
                   </Fragment>

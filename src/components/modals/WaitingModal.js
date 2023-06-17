@@ -18,9 +18,9 @@ export default function WaitingModal({ code, submit }) {
         const accounts = await window.ethereum?.request({
           method: "eth_accounts",
         });
-        if (accounts?.length > 0 || sessionStorage.getItem("address")) {
+        if (accounts?.length > 0 || localStorage.getItem("address")) {
           setAddress(
-            accounts ? accounts[0] : sessionStorage.getItem("address")
+            accounts?.length ? accounts[0] : localStorage.getItem("address")
           );
         } else {
           navigate("/game");
@@ -36,7 +36,7 @@ export default function WaitingModal({ code, submit }) {
   const onClick = () => {
     if (!code) {
       axios
-        .post("/check-code", {
+        .post("/api/check-code", {
           address,
           code: inpCode,
         })

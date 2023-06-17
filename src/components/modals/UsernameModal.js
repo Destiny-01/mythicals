@@ -9,9 +9,9 @@ export default function UsernameModal({ isToggled, setIsToggled }) {
       return;
     }
     axios
-      .post("/username", {
+      .post("/api/username", {
         address:
-          window.ethereum?.selectedAddress || sessionStorage.getItem("address"),
+          window.ethereum?.selectedAddress || localStorage.getItem("address"),
         username,
       })
       .then((res) => {

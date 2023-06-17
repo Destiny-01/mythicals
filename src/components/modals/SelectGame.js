@@ -18,12 +18,12 @@ export default function SelectGame() {
         method: "eth_accounts",
       });
       if (!accounts || accounts.length === 0) {
-        if (sessionStorage.getItem("address")?.length > 12) {
+        if (localStorage.getItem("address")?.length > 12) {
           if (id > 1) {
             navigate("/egg");
           } else {
-            const res = await axios.post("/code", {
-              address: sessionStorage.getItem("address"),
+            const res = await axios.post("/api/code", {
+              address: localStorage.getItem("address"),
             });
             navigate("/egg?code=" + res.data.data);
           }
@@ -34,7 +34,7 @@ export default function SelectGame() {
         if (id > 1) {
           navigate("/egg");
         } else {
-          const res = await axios.post("/code", {
+          const res = await axios.post("/api/code", {
             address: accounts[0],
           });
           navigate("/egg?code=" + res.data.data);

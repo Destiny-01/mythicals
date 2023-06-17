@@ -97,18 +97,18 @@ export default function Arena({ socket }) {
         const accounts = await window.ethereum?.request({
           method: "eth_accounts",
         });
-        const address =
-          accounts?.length > 0
-            ? accounts[0]
-            : sessionStorage.getItem("address");
-        const res = await axios.post("/game/" + id, {
-          address: address,
+        const userAddress =
+          accounts?.length > 0 ? accounts[0] : localStorage.getItem("address");
+        console.log(userAddress);
+        const res = await axios.post("/api/game/" + id, {
+          address: userAddress,
         });
 
         if (res.data.data) {
           const game = res.data.data;
           const returnedPlayer = res.data.player;
 
+          setAddress(userAddress);
           setPlayers(game.players);
           setTurn(game.turn === returnedPlayer);
           setDuration(game.time);
@@ -196,11 +196,8 @@ export default function Arena({ socket }) {
 
         <Row className="game-row mx-md-5 mt-3">
           <Grid
-            player={players.find(
-              (x) =>
-                x.address !== window.ethereum?.selectedAddress ||
-                sessionStorage.getItem("address")
-            )}
+            player={players.find((x) => x.address !== address)}
+            address={address}
             guesses={myGuesses}
             currentGuess={currentGuess}
             solution={oppSol}
@@ -217,11 +214,8 @@ export default function Arena({ socket }) {
           </Col>
 
           <Grid
-            player={players.find(
-              (x) =>
-                x.address === window.ethereum?.selectedAddress ||
-                sessionStorage.getItem("address")
-            )}
+            player={players.find((x) => x.address === address)}
+            address={address}
             guesses={opponentGuesses}
             currentGuess={""}
             solution={solution}

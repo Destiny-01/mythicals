@@ -298,6 +298,10 @@ h5 {
   font-size: 12px;
 }
 
+.game-mode-img {
+  display: none;
+}
+
 @media only screen and (max-width: 768px) {
   .key > img {
     width: 40px;
@@ -309,6 +313,10 @@ h5 {
   }
   .card.gamecard {
     margin-bottom: 24px;
+    flex-direction: row;
+  }
+  .card.gamecard > img {
+    width: 40%;
   }
   .game-row {
     flex-wrap: nowrap;
@@ -318,7 +326,11 @@ h5 {
     max-width: fit-content;
   }
 
+  .game-mode-img {
+    display: block;
+  }
+
   .guess {
-    min-width: 90vw;
+    width: max-content;
   }
 }

@@ -23,7 +23,7 @@ export const metamaskConnect = async () => {
     return rAccounts || null;
   }
   localStorage.setItem("_metamask", accounts[0]);
-  const res = await axios.post("/connect", {
+  const res = await axios.post("/api/connect", {
     address: accounts[0],
   });
   console.log(res);
@@ -93,7 +93,7 @@ const changeChainId = async () => {
     method: "eth_requestAccounts",
   });
   localStorage.setItem("_metamask", accounts[0]);
-  const res = await axios.post("/connect", {
+  const res = await axios.post("/api/connect", {
     address: accounts[0],
   });
   if (res.data.data) {
@@ -106,12 +106,13 @@ const changeChainId = async () => {
 
 export const burnerWallet = async () => {
   const { address, privateKey } = Wallet.createRandom();
+  console.log(address);
 
-  const res = await axios.post("/connect", {
+  const res = await axios.post("/api/connect", {
     address,
   });
-  sessionStorage.setItem("address", address);
-  sessionStorage.setItem("pk", privateKey);
+  localStorage.setItem("address", address);
+  localStorage.setItem("pk", privateKey);
   if (res.data.data) {
     return address;
   }

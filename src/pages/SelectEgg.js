@@ -59,14 +59,15 @@ export default function SelectEgg({ socket }) {
 
     const accounts = await window.ethereum?.request({ method: "eth_accounts" });
 
-    if (accounts?.length === 0 && !sessionStorage.getItem("address")) {
+    if (accounts?.length === 0 && !localStorage.getItem("address")) {
       return;
     }
     console.log(
       query.get("code") ? "newGame" : "joinGame",
       code,
       currentGuess,
-      accounts ? accounts[0] : sessionStorage.getItem("address"),
+      accounts,
+      accounts?.length > 0 ? accounts[0] : localStorage.getItem("address"),
       time
     );
 
@@ -74,7 +75,7 @@ export default function SelectEgg({ socket }) {
       query.get("code") ? "newGame" : "joinGame",
       code,
       currentGuess,
-      accounts ? accounts[0] : sessionStorage.getItem("address"),
+      accounts?.length > 0 ? accounts[0] : localStorage.getItem("address"),
       time
     );
   };
