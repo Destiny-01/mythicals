@@ -26,14 +26,14 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.post("/code", createCode);
-app.post("/game/:id", getGame);
-app.post("/check-code", checkCode);
-app.post("/create", createGame);
-app.post("/join", joinGame);
-app.post("/guess", guessCode);
-app.post("/connect", connectWallet);
-app.post("/username", updateUsername);
+app.post("/api/code", createCode);
+app.post("/api/game/:id", getGame);
+app.post("/api/check-code", checkCode);
+app.post("/api/create", createGame);
+app.post("/api/join", joinGame);
+app.post("/api/guess", guessCode);
+app.post("/api/connect", connectWallet);
+app.post("/api/username", updateUsername);
 
 io.on("connection", (client) => {
   console.log(`⚡: ${client.id} user just connected!`);
@@ -44,9 +44,6 @@ io.on("connection", (client) => {
     client.leave(room);
     console.log(`Client ${client.id} left room ${room}`);
   });
-  client.on("newGame", handleNewGame);
-  client.on("joinGame", handleJoinGame);
-  client.on("guess", handleGuess);
 
   const handleGuess = (id, guess, address) => {
     axios
@@ -59,7 +56,7 @@ io.on("connection", (client) => {
           client.broadcast.emit("lostGame", res.data.data);
         }
       })
-      .catch((err) => console.log(err.message));
+      .catch((err) => console.log(err.response.data.message));
   };
 
   const handleNewGame = (id, solution, address, time) => {
@@ -69,7 +66,7 @@ io.on("connection", (client) => {
         client.join(id);
         client.emit("init", 1, id);
       })
-      .catch((err) => console.log(err.message));
+      .catch((err) => console.log(err.response.data.message));
   };
 
   const handleJoinGame = (id, solution, address) => {
@@ -79,8 +76,13 @@ io.on("connection", (client) => {
         client.join(id);
         client.emit("init", 2, id);
         client.broadcast.to(id).emit("joined", res.data.data);
-      });
+      })
+      .catch((err) => console.log(err.response.data.message));
   };
+
+  client.on("newGame", handleNewGame);
+  client.on("joinGame", handleJoinGame);
+  client.on("guess", handleGuess);
 });
 
 const PORT = process.env.PORT || 8000;
