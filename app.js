@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const http = require("http").Server(app);
 const cors = require("cors");
-const axios = require("axios");
+const axiosDefault = require("axios");
 const db = require("./db");
 const {
   createGame,
@@ -35,6 +35,12 @@ app.post("/api/guess", guessCode);
 app.post("/api/connect", connectWallet);
 app.post("/api/username", updateUsername);
 
+const baseURL =
+  process.env.NODE_ENV === "production"
+    ? "https://mythicals.onrender.com"
+    : "http://localhost:8000";
+const axios = axiosDefault.create({ baseURL });
+
 io.on("connection", (client) => {
   console.log(`⚡: ${client.id} user just connected!`);
   client.on("disconnect", () => {
@@ -47,7 +53,7 @@ io.on("connection", (client) => {
 
   const handleGuess = (id, guess, address) => {
     axios
-      .post("http://localhost:8000/api/guess", { id, guess, address })
+      .post("/api/guess", { id, guess, address })
       .then((res) => {
         client.emit("myGuess", res.data.data);
         client.broadcast.emit("opponentGuess", res.data.data);
@@ -63,7 +69,7 @@ io.on("connection", (client) => {
 
   const handleNewGame = (id, solution, address, time) => {
     axios
-      .post("http://localhost:8000/api/create", { id, solution, address, time })
+      .post("/api/create", { id, solution, address, time })
       .then((res) => {
         client.join(id);
         client.emit("init", 1, id);
@@ -75,7 +81,7 @@ io.on("connection", (client) => {
 
   const handleJoinGame = (id, solution, address) => {
     axios
-      .post("http://localhost:8000/api/join", { id, solution, address })
+      .post("/api/join", { id, solution, address })
       .then((res) => {
         client.join(id);
         client.emit("init", 2, id);
