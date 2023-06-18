@@ -56,7 +56,9 @@ io.on("connection", (client) => {
           client.broadcast.emit("lostGame", res.data.data);
         }
       })
-      .catch((err) => console.log(err.response.data.message));
+      .catch((err) =>
+        console.log(err.response?.data.message || err.message || err)
+      );
   };
 
   const handleNewGame = (id, solution, address, time) => {
@@ -66,7 +68,9 @@ io.on("connection", (client) => {
         client.join(id);
         client.emit("init", 1, id);
       })
-      .catch((err) => console.log(err.response.data.message));
+      .catch((err) =>
+        console.log(err.response?.data.message || err.message || err)
+      );
   };
 
   const handleJoinGame = (id, solution, address) => {
@@ -77,7 +81,9 @@ io.on("connection", (client) => {
         client.emit("init", 2, id);
         client.broadcast.to(id).emit("joined", res.data.data);
       })
-      .catch((err) => console.log(err.response.data.message));
+      .catch((err) =>
+        console.log(err.response?.data.message || err.message || err)
+      );
   };
 
   client.on("newGame", handleNewGame);
