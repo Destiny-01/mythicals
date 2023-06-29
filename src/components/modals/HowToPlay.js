@@ -6,7 +6,10 @@ export default function HowToPlay() {
 
   return (
     <Fragment>
-      <Button outline className="ms-2" onClick={() => setIsToggled(!isToggled)}>
+      <Button
+        className="ms-2 secondary-btn"
+        onClick={() => setIsToggled(!isToggled)}
+      >
         How to play
       </Button>
       <Modal

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Button,
   Collapse,
@@ -9,60 +9,33 @@ import {
   NavItem,
   NavLink,
 } from "reactstrap";
-import Logo from "../assets/Logo.svg";
-import { useLocation } from "react-router-dom";
+import Logo from "../assets/Logo.png";
+import LogoRound from "../assets/LogoRoundThick.png";
+import Union from "../assets/Union.png";
 import SelectWallet from "./modals/SelectWallet";
 import Avatar1 from "../assets/Avatar1.png";
+import { useAppContext } from "../context/AppContext";
 
 export default function NavbarWrapper() {
   const [isToggled, setIsToggled] = useState(false);
   const [logoutToggle, setLogoutToggle] = useState(false);
-  const [address, setAddress] = useState("");
-  const disconnect = () => {
-    localStorage.removeItem("_metamask");
-    localStorage.removeItem("address");
-    localStorage.removeItem("pk");
-    setAddress("");
-  };
-  let location = useLocation();
-
-  useEffect(() => {
-    if (window.ethereum) {
-      if (window.ethereum.selectedAddress) {
-        setAddress(window.ethereum.selectedAddress);
-      } else {
-        window.ethereum.request({ method: "eth_accounts" }).then((accounts) => {
-          if (accounts.length > 0) {
-            setAddress(accounts[0]);
-            localStorage.setItem("address", accounts[0]);
-          } else {
-            setAddress(localStorage.getItem("address"));
-          }
-        });
-      }
-    } else {
-      localStorage.getItem("address") &&
-        setAddress(localStorage.getItem("address"));
-    }
-  }, [address]);
+  const { address, disconnect, player, balance } = useAppContext();
 
   return (
     <div>
-      <Navbar expand="md" className="p-0 m-0" dark>
+      <Navbar expand="md" className="p-0 m-0 pt-2" dark>
         <NavbarBrand href="/" className="p-0 pe-md-5">
           <img src={Logo} alt="WOw" />
         </NavbarBrand>
         <NavbarToggler onClick={() => setIsToggled(!isToggled)} />
         <Collapse navbar isOpen={isToggled}>
-          <Nav
-            className={`mx-auto ps-md-5  ${
-              location.pathname === "/" ? "d-flex" : "d-none"
-            }`}
-            navbar
-          >
+          <Nav className={`mx-auto ps-md-5 d-flex`} navbar>
             <NavItem>
-              <NavLink active href="#" className="active">
+              <NavLink active href="/" className="active">
                 Home
+                <div className="union">
+                  <img src={Union} alt="" className="mt-1" width={45} />
+                </div>
               </NavLink>
             </NavItem>
             <NavItem>
@@ -75,20 +48,21 @@ export default function NavbarWrapper() {
               <NavLink href="#">Token</NavLink>
             </NavItem>
           </Nav>
-          <Nav className={`${location.pathname === "/" ? "ms-0" : "ms-auto"}`}>
+          <Nav className={`ms-0`}>
             {address ? (
               <>
                 <div
-                  className="loggedin cad d-flex align-items-center"
+                  className="loggedin cad d-flex gap-2 align-items-center"
                   onClick={() => setLogoutToggle(!logoutToggle)}
                 >
                   <div className="">
-                    <img src={Avatar1} alt="" className="me-2" />
+                    <img src={Avatar1} alt="" className="" />
                   </div>
 
-                  <p className="m-0">
-                    {address.slice(0, 5)}...{address.slice(-5)}
-                  </p>
+                  <p className="m-0 ">{player.username}</p>
+                  <div className="line"></div>
+                  <img src={LogoRound} alt="" />
+                  <p className="m-0 ">{balance} MYTH</p>
                 </div>
                 <Collapse isOpen={logoutToggle} horizontal>
                   <Button

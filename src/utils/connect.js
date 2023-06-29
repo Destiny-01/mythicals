@@ -5,6 +5,12 @@ import { devnet } from "./chains";
 
 const chain = devnet;
 const { ethereum } = window;
+export const wcProvider = new WalletConnectProvider({
+  rpc: {
+    1666900000: "https://api.s0.ps.hmny.io",
+    137: "https://matic-mainnet.chainstacklabs.com",
+  },
+});
 export const metamaskConnect = async () => {
   if (!ethereum) {
     window
@@ -19,43 +25,47 @@ export const metamaskConnect = async () => {
   const chainId = await ethereum.request({ method: "eth_chainId" });
 
   if (chainId !== chain.chainId) {
-    const rAccounts = await changeChainId();
-    return rAccounts || null;
+    return await changeChainId();
   }
-  localStorage.setItem("_metamask", accounts[0]);
   const res = await axios.post("/api/connect", {
     address: accounts[0],
   });
-  console.log(res);
-  if (res.data.data) {
-    return accounts[0];
-  }
-  setTimeout(() => {
-    window.location.reload();
-  }, 1000);
-  console.log(accounts[0]);
+  return { address: accounts[0], newUser: res.data.data };
 };
 
 export const walletConnect = async () => {
-  const provider = new WalletConnectProvider({
-    rpc: {
-      1666900000: "https://api.s0.ps.hmny.io",
-    },
-  });
-
-  await provider.enable();
-  provider.on("accountsChanged", (accounts) => {
-    console.log(accounts);
-    localStorage.setItem("_metamask", accounts[0]);
-  });
-  provider.on("chainChanged", (chainId) => {
-    console.log(chainId);
-    if (chainId !== chain.chainId) {
-      return alert("Connect to harmony chain");
+  try {
+    console.log(wcProvider);
+    if (wcProvider.chainId !== chain.chainId) {
+      return alert("Connect to harmony devnet");
     }
-  });
-  const providerr = new providers.Web3Provider(provider);
-  window.provider = providerr;
+
+    await wcProvider.enable();
+    const provider = new providers.Web3Provider(wcProvider);
+    const { accounts } = wcProvider;
+    const res = await axios.post("/api/connect", {
+      address: accounts[0],
+    });
+
+    window.provider = provider;
+    return { address: accounts[0], newUser: res.data.data };
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+wcProvider.on("chainChanged", async (chainId) => {
+  console.log(chainId);
+  if (chainId !== chain.chainId) {
+    await wcProvider.disconnect();
+    return alert("Connect to harmony chain");
+  }
+  await wcProvider.enable();
+});
+
+export const disconnectWalletConnect = async () => {
+  await wcProvider.disconnect();
+  window.provider = null;
 };
 
 const changeChainId = async () => {
@@ -92,16 +102,11 @@ const changeChainId = async () => {
   const accounts = await ethereum.request({
     method: "eth_requestAccounts",
   });
-  localStorage.setItem("_metamask", accounts[0]);
   const res = await axios.post("/api/connect", {
     address: accounts[0],
   });
-  if (res.data.data) {
-    return accounts[0];
-  }
-  setTimeout(() => {
-    window.location.reload();
-  }, 1000);
+
+  return { address: accounts[0], newUser: res.data.data };
 };
 
 export const burnerWallet = async () => {

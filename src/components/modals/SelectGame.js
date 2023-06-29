@@ -1,44 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, ModalBody, Modal } from "reactstrap";
-import LogoRound from "../../assets/LogoRound.svg";
+import Logo from "../../assets/Logo.png";
 import { useNavigate } from "react-router-dom";
-import axios from "../../config/axios";
 import SelectWallet from "./SelectWallet";
+import { useAppContext } from "../../context/AppContext";
 
-export default function SelectGame() {
+export default function SelectGame({ socket }) {
   const [isToggled, setIsToggled] = useState(false);
   const [disabled, setDisabled] = useState(0);
   const [unAuthenticated, setUnAuthenticated] = useState(false);
   const navigate = useNavigate();
+  const { address } = useAppContext();
+
+  useEffect(() => {
+    socket.on("code", (code) => {
+      navigate("/lobby?code=" + code);
+    });
+  }, [navigate, socket]);
 
   const handleCreate = async (id) => {
     setDisabled(id);
     try {
-      const accounts = await window.ethereum?.request({
-        method: "eth_accounts",
-      });
-      if (!accounts || accounts.length === 0) {
-        if (localStorage.getItem("address")?.length > 12) {
-          if (id > 1) {
-            navigate("/egg");
-          } else {
-            const res = await axios.post("/api/code", {
-              address: localStorage.getItem("address"),
-            });
-            navigate("/egg?code=" + res.data.data);
-          }
+      if (address) {
+        if (id > 1) {
+          navigate("/lobby");
         } else {
-          setUnAuthenticated(true);
+          socket.emit("createCode", address);
         }
       } else {
-        if (id > 1) {
-          navigate("/egg");
-        } else {
-          const res = await axios.post("/api/code", {
-            address: accounts[0],
-          });
-          navigate("/egg?code=" + res.data.data);
-        }
+        setUnAuthenticated(true);
       }
     } catch (err) {
       console.log(err);
@@ -58,7 +48,8 @@ export default function SelectGame() {
         >
           <ModalBody>
             <img
-              src={LogoRound}
+              src={Logo}
+              width={48}
               alt=""
               className="img-fluid mx-auto d-block mb-3 "
             />
@@ -78,6 +69,7 @@ export default function SelectGame() {
             <Button
               disabled={disabled === 2}
               onClick={() => handleCreate(2)}
+              className="secondary-btn"
               block
             >
               Join existing

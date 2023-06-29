@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, ModalBody, Modal, Container, Row, Col } from "reactstrap";
-import LogoRound from "../../assets/LogoRound.svg";
+import LogoRound from "../../assets/Logo.png";
 import Metamask from "../../assets/logos/Metamask.svg";
 import WalletConnect from "../../assets/logos/WalletConnect.svg";
 import NoWallet from "../../assets/logos/no-wallet.png";
@@ -10,24 +10,49 @@ import {
   walletConnect,
 } from "../../utils/connect";
 import UsernameModal from "./UsernameModal";
+import { useAppContext } from "../../context/AppContext";
 
 export default function SelectWallet({ button }) {
   const [isToggled, setIsToggled] = useState(button || false);
   const [isModalToggled, setIsModalToggled] = useState(false);
+  const [address, setReturnedAddress] = useState("");
+  const [provider, setReturnedProvider] = useState("");
+  const { setAddress, setProvider } = useAppContext();
   const connectMetamask = async () => {
-    metamaskConnect().then((success) => {
-      if (success) {
-        setIsToggled(false);
+    metamaskConnect().then((res) => {
+      setIsToggled(false);
+      localStorage.setItem("provider", "metamask");
+      if (res.newUser) {
         setIsModalToggled(true);
+        setReturnedAddress(res.address);
+        setReturnedProvider("metamask");
+        return;
       }
+      setProvider("metamask");
+      setAddress(res.address);
     });
   };
   const connectBurner = async () => {
-    burnerWallet().then((success) => {
-      if (success) {
-        setIsToggled(false);
+    burnerWallet().then((res) => {
+      setIsToggled(false);
+      if (res.newUser) {
         setIsModalToggled(true);
+        setReturnedAddress(res.address);
       }
+    });
+  };
+  const connectWallet = () => {
+    walletConnect().then((res) => {
+      localStorage.setItem("provider", "walletConnect");
+      setIsToggled(false);
+      if (res.newUser) {
+        setIsModalToggled(true);
+        setReturnedAddress(res.address);
+        setReturnedProvider("walletConnect");
+        return;
+      }
+      setAddress(res.address);
+      setProvider("walletConnect");
     });
   };
 
@@ -42,14 +67,12 @@ export default function SelectWallet({ button }) {
         isOpen={isToggled}
         toggle={() => setIsToggled(!isToggled)}
         centered
+        backdrop="static"
+        className="select-modal"
       >
         <ModalBody>
-          <img
-            src={LogoRound}
-            alt=""
-            className="img-fluid mx-auto d-block mb-3 "
-          />
-          <h5 className="mb-3 text-center">Select preferred wallet provider</h5>
+          <img src={LogoRound} alt="" className="img-fluid mx-auto d-block" />
+          <h2 className="mb-3 text-center">Connect your wallet</h2>
           <Container>
             <Row>
               <Col
@@ -67,7 +90,7 @@ export default function SelectWallet({ button }) {
               </Col>
               <Col
                 className="text-center"
-                onClick={walletConnect}
+                onClick={connectWallet}
                 style={{ cursor: "pointer" }}
               >
                 <img
@@ -78,6 +101,8 @@ export default function SelectWallet({ button }) {
                 <p className="mb-0">Wallet Connect</p>
                 <p className="caption text-grey">Recommended for mobile</p>
               </Col>
+            </Row>
+            <Row>
               <Col
                 className="text-center"
                 onClick={connectBurner}
@@ -90,15 +115,18 @@ export default function SelectWallet({ button }) {
                   width={60}
                   className="img-fluid rounded-circle mx-auto d-block mb-3 "
                 />
-                <p className="mb-0">No wallet?</p>
-                <p className="caption text-grey">Create a burner wallet</p>
+                <p className="mb-0">Burner wallet</p>
+                <p className="caption text-grey">For testing only</p>
               </Col>
+              <Col className="invisible"></Col>
             </Row>
           </Container>
         </ModalBody>
       </Modal>
       <UsernameModal
         isToggled={isModalToggled}
+        address={address}
+        provider={provider}
         setIsToggled={setIsModalToggled}
       />
     </div>

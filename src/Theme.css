@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Lora:wght@700&display=swap");
+
 :root {
   --white: #ffffff;
   --bg: #141625;
@@ -6,7 +8,10 @@
   --accent: #f4d1c8;
   --secondary: #ab7f39;
   --gradient: #906c31;
-  --card: #191d30;
+  --card: #2d515d;
+  --green: #0a5f62;
+  --brown: #2f2320;
+  --line: #254751;
 }
 
 html {
@@ -20,6 +25,10 @@ body {
   overflow-x: hidden;
 }
 
+.font-display {
+  font-family: "Lora", serif;
+}
+
 .nav-link {
   color: var(--white);
 }
@@ -28,12 +37,15 @@ body {
   color: var(--grey);
 }
 
-.nav-link.active {
+.nav-item .nav-link.active {
   color: var(--main);
 }
 
-.btn,
-.aler {
+.nav-item {
+  position: relative;
+}
+
+.btn {
   padding: 12px 28px;
   color: var(--white);
   border: 2px solid var(--secondary);
@@ -41,7 +53,11 @@ body {
   /* box-shadow: 0px -6px 12px 0px #0000004d inset; */
   box-shadow: 0px 6px 12px 0px #ffffff4d inset,
     0px -6px 12px 0px #0000004d inset;
-  border-radius: 13px;
+  border-radius: 0;
+}
+
+.secondary-btn {
+  background-color: var(--green);
 }
 
 .alert {
@@ -60,10 +76,9 @@ a {
 
 .btn:hover {
   border: 2px solid var(--secondary);
-  background: var(--main);
+  /* background: var(--main); */
   box-shadow: inset 4px 4px 8px rgba(255, 255, 255, 0.3),
     inset -4px -4px 8px rgba(0, 0, 0, 0.3);
-  border-radius: 13px;
 }
 
 .btn:active,
@@ -84,7 +99,7 @@ a {
 }
 
 h1 {
-  font-family: "PT Serif", serif;
+  font-family: "Lora", serif;
   font-weight: bold;
   font-size: 3rem;
 }
@@ -105,7 +120,7 @@ h4 {
 }
 
 h2 {
-  font-family: "PT Serif", serif;
+  font-family: "Lora", serif;
   font-weight: normal;
   font-size: 1.5rem;
 }
@@ -116,33 +131,102 @@ h2 {
   border-color: rgba(255, 255, 255, 0.55);
 }
 
+.lobby {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.lobby .input-container {
+  max-width: 25%;
+  margin: 0 auto;
+}
+
+.bg-green,
+.lobby .waiting-input,
+.lobby .waiting-input:focus,
+.lobby .waiting-input:disabled {
+  background-color: var(--card);
+}
+
+.lobby .waiting-input {
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.lobby-text {
+  width: fit-content;
+  margin: auto;
+  margin-top: 16px;
+  padding: 8px;
+  border-radius: 2px;
+  background: var(--card, #2d515d);
+  box-shadow: -4px -4px 8px 0px rgba(0, 0, 0, 0.3) inset,
+    4px 4px 8px 0px rgba(255, 255, 255, 0.3) inset;
+  min-width: 72px;
+}
+
+.lobby-text p {
+  border-radius: 2px;
+  color: rgba(255, 255, 255, 0.8);
+  background: var(--background, #1f272a);
+  padding: 8px 24px;
+  box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.5) inset;
+  margin-bottom: 0;
+}
+
+.lobby-text.italic p {
+  font-style: italic;
+}
+
+.union {
+  position: absolute;
+  bottom: 0;
+}
+
 .card {
   background: var(--card);
+  border-radius: 0;
 }
 
 @media only screen and (min-width: 768px) {
   .card-img-top {
     height: 290px;
   }
-  .active .card-img-top {
-    height: 300px;
-  }
+}
+
+.welcome {
+  text-align: center;
+}
+
+.welcome .row {
+  align-items: center;
+}
+
+.welcome .col:last-of-type h2 {
+  margin-top: 50px;
 }
 
 .card.gamecard {
-  border: 9px solid #21212f;
+  padding: 9px;
+  background-color: var(--brown);
   cursor: not-allowed;
-}
-.guesscard {
-  background: var(--card);
-  padding: 16px;
-  border-radius: 6px;
+  border-radius: 8px;
+  box-shadow: inset 4px 4px 8px rgba(255, 255, 255, 0.3),
+    inset -4px -4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .card.gamecard.active {
-  border: 9px solid var(--main);
-  outline: 2px solid var(--secondary);
+  background-color: var(--card);
   cursor: pointer;
+  border: 4px solid #ab7f39;
+  box-shadow: 0px 16px 32px 10px rgba(171, 127, 57, 0.6);
+}
+
+.guesscard {
+  background: var(--card);
+  padding: 16px;
 }
 
 .caption {
@@ -160,7 +244,6 @@ h2 {
 
 .modal-content {
   background-color: var(--card);
-  border-radius: 1rem;
   padding-top: 1rem;
   padding-bottom: 2rem;
 }
@@ -173,6 +256,19 @@ h2 {
 
 .modal-header .btn-close {
   color: rgba(255, 255, 255, 0.88);
+}
+
+.select-modal .row {
+  gap: 24px;
+}
+
+.select-modal .row:last-child {
+  margin-top: 24px;
+}
+
+.select-modal .col {
+  background-color: var(--line);
+  padding-top: 1rem;
 }
 
 h5 {
@@ -199,6 +295,11 @@ h5 {
   border-radius: 13px;
 }
 
+.line {
+  border-right: 2px solid #254751;
+  height: 80%;
+}
+
 /* width */
 ::-webkit-scrollbar {
   width: 0px;
@@ -219,16 +320,176 @@ h5 {
   padding-left: calc(4px * 0.5);
 }
 
+img[alt="eggNull"] {
+  display: flex;
+  padding: 13px 8px 18px 9px;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 2px;
+  border: 2px solid #5d3430;
+  background: #5d3430;
+  width: 56px;
+  height: 70px;
+}
+
+.select .card:first-of-type {
+  overflow: hidden;
+}
+
 .selectcard .card-body {
   padding: 1rem 0rem;
+}
+
+.select-col {
+  justify-content: space-around;
+  align-items: center;
+}
+
+.select-col .col {
+  max-width: fit-content;
+  text-align: center;
+}
+
+.select-col .lobby-text {
+  margin: 0;
+  margin-top: 16px;
+}
+
+.select .card {
+  border-radius: 8px;
+}
+
+.select .card h2 {
+  font-size: 24px;
+  margin: 0;
+}
+
+.select ul {
+  color: var(--grey);
+  font-size: 14px;
+  padding-left: 16px;
+}
+
+.select a {
+  display: block;
+  width: 100%;
+  text-align: center;
+  color: var(--white);
+}
+
+.select .input-group div {
+  background-color: #171a2c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.select .input-group input:disabled ~ div {
+  background-color: #1f272a;
+}
+
+.select .input-group input {
+  background-color: #171a2c;
+}
+
+.select .input-group input:disabled {
+  background-color: #1f272a;
+}
+
+.chart-container {
+  width: fit-content;
+  margin: 0 auto;
+  border-radius: 6px;
+  background: #5d3430;
+  padding: 16px;
+  box-shadow: -4px -4px 8px 0px rgba(0, 0, 0, 0.3) inset,
+    4px 4px 8px 0px rgba(255, 255, 255, 0.3) inset;
+}
+
+.perks {
+  width: 240px;
+  display: flex;
+  /* justify-content: space-between; */
+}
+
+.perk {
+  min-width: 90%;
+}
+
+.perk img {
+  border-radius: 2px;
+  padding: 10px 4px 12px 4px;
+  border: 2px solid var(--secondary);
+  background: linear-gradient(357deg, #0442a5 0%, #268db9 100%);
+  box-shadow: -4px -4px 8px 0px rgba(0, 0, 0, 0.3) inset,
+    4px 4px 8px 0px rgba(255, 255, 255, 0.3) inset;
+}
+
+.perks-wrapper {
+  display: grid;
+  min-width: 136px;
+  min-height: 166px;
+  grid-template-columns: auto auto;
+  border-radius: 8px;
+  background: #411512;
+  box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.5) inset;
+  gap: 8px;
+  padding: 8px;
+}
+
+.perks-wrapper > * {
+  margin: auto;
+}
+
+.select .card-title {
+  text-align: center;
+  padding: 20px;
+  margin: 0;
+  border-bottom: 3px solid var(--line);
+}
+
+.card.gamecard .card-egg {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--brown);
+  top: -24px;
+  right: 24px;
+  padding: 12px;
+  border-radius: 50%;
+}
+
+.card.gamecard.active .card-body {
+  padding-top: 10px;
+}
+
+.card.gamecard.active .card-egg {
+  background-color: var(--card);
+  top: -32px;
+}
+
+.card.gamecard .card-body-wrapper {
+  position: relative;
+}
+
+.game-mode-text {
+  width: 75%;
+  margin: 0 auto;
 }
 
 .cell {
   width: 56px;
 }
 
-.selectcard {
-  border-radius: 16px;
+.selectcard .row-cols-auto {
+  border-top: 4px solid var(--line);
+  width: 70%;
+  margin: 4px auto;
 }
 
 .waitingroom {

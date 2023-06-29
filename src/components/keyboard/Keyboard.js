@@ -49,6 +49,7 @@ export default function Keyboard({
             );
           })}
           <Key id="null" state="null" onClick={onClick} />
+
           {eggsArray.slice(3, 6).map((egg) => {
             return (
               <Key
@@ -63,7 +64,11 @@ export default function Keyboard({
           })}
         </Row>
         <Row className="row-cols-auto justify-content-center g-2">
-          <Key id="submit" state="default" onClick={onClick} />
+          {window.location.pathname.startsWith("/room") ? (
+            <Key id="submit" state="default" onClick={onClick} />
+          ) : (
+            <Key id="null" state="null" onClick={onClick} />
+          )}
 
           {eggsArray.slice(6, 10).map((egg) => {
             return (

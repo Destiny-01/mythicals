@@ -1,25 +1,42 @@
-// import Dead from "./Dead.json";
-// import { BigNumber, ethers, providers } from "ethers";
+import MythToken from "../contract/abi/MythToken.json";
+import Myth from "../contract/abi/Myth.json";
+import { ethers, providers, utils } from "ethers";
 
-// const provider = window.provider
-//   ? window.provider
-//   : new providers.Web3Provider(window.ethereum);
-// const signer = provider.getSigner();
-// const address = "0xf3789DE4a687F81A05315f17e8bD6236aEb83887"; //devnet
-// export const contract = new ethers.Contract(address, Dead.abi, signer);
-// console.log(contract);
+const provider = window.provider
+  ? window.provider
+  : new providers.Web3Provider(window.ethereum);
+const signer = provider.getSigner();
+export const tokenContract = new ethers.Contract(
+  MythToken.address,
+  MythToken.abi,
+  signer
+);
+export const contract = new ethers.Contract(Myth.address, Myth.abi, signer);
 
-// export const mintNFT = async (id, guess) => {
-//   try {
-//     const res = await contract.won(id, guess);
-//     await res.wait();
-//     if (res.transactionHash) {
-//       return res.transactionHash;
-//     }
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
+export const initialMint = async () => {
+  try {
+    const res = await contract.initialMint();
+    await res.wait();
+    if (res.transactionHash) {
+      return res.transactionHash;
+    }
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+export const getBalance = async (address) => {
+  try {
+    const res = await tokenContract.balanceOf(address);
+    console.log(res);
+
+    return utils.formatEther(res.toString());
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
 
 // export const getGuessStatuses = (result) => {
 //   const statuses = Array.from(Array(result.length));

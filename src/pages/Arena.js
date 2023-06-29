@@ -9,11 +9,11 @@ import WinGame from "../components/modals/WinGame";
 import LoseGame from "../components/modals/LoseGame";
 import axios from "../config/axios";
 import Timer from "../components/Timer";
+import { useAppContext } from "../context/AppContext";
 
 export default function Arena({ socket }) {
   const [currentGuess, setCurrentGuess] = useState("");
   const [solution, setSolution] = useState("");
-  const [address, setAddress] = useState("");
   const [key, setKey] = useState(0);
   const [players, setPlayers] = useState([]);
   const [isGameWon, setIsGameWon] = useState(false);
@@ -29,6 +29,7 @@ export default function Arena({ socket }) {
   const [myStatus, setMyStatus] = useState([]);
   const [opponentStatus, setOpponentStatus] = useState([]);
   const { id } = useParams();
+  const { address } = useAppContext();
 
   useEffect(() => {
     socket.on("myGuess", (game) => {
@@ -94,21 +95,14 @@ export default function Arena({ socket }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const accounts = await window.ethereum?.request({
-          method: "eth_accounts",
-        });
-        const userAddress =
-          accounts?.length > 0 ? accounts[0] : localStorage.getItem("address");
-        console.log(userAddress);
         const res = await axios.post("/api/game/" + id, {
-          address: userAddress,
+          address,
         });
 
         if (res.data.data) {
           const game = res.data.data;
           const returnedPlayer = res.data.player;
 
-          setAddress(userAddress);
           setPlayers(game.players);
           setTurn(game.turn === returnedPlayer);
           setDuration(game.time);
@@ -130,7 +124,7 @@ export default function Arena({ socket }) {
     };
 
     fetchData();
-  }, [id]);
+  }, [address, id]);
 
   const onComplete = (t) => {
     if (t === duration) {

@@ -1885,6 +1885,11 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
+"@kurkle/color@^0.3.0":
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/@kurkle/color/-/color-0.3.2.tgz#5acd38242e8bde4f9986e7913c8fdf49d3aa199f"
+  integrity sha512-fuscdXJ9G1qb7W8VdHi+IwRqij3lBkosAm4ydQtEmbY58OzHXqQhvlxqEkoz0yssNVn38bcpRWgA9PP+OGoisw==
+
 "@leichtgewicht/ip-codec@^2.0.1":
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/@leichtgewicht/ip-codec/-/ip-codec-2.0.4.tgz#b2ac626d6cb9c8718ab459166d4bb405b8ffa78b"
@@ -3912,6 +3917,23 @@ char-regex@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/char-regex/-/char-regex-2.0.1.tgz#6dafdb25f9d3349914079f010ba8d0e6ff9cd01e"
   integrity sha512-oSvEeo6ZUD7NepqAat3RqoucZ5SeqLJgOvVIwkafu6IP3V0pO38s/ypdVUmDDK6qIIHNlYHJAKX9E7R7HoKElw==
+
+chart.js@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/chart.js/-/chart.js-4.3.0.tgz#ac363030ab3fec572850d2d872956f32a46326a1"
+  integrity sha512-ynG0E79xGfMaV2xAHdbhwiPLczxnNNnasrmPEXriXsPJGjmhOBYzFVEsB65w2qMDz+CaBJJuJD0inE/ab/h36g==
+  dependencies:
+    "@kurkle/color" "^0.3.0"
+
+chartjs-plugin-annotation@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/chartjs-plugin-annotation/-/chartjs-plugin-annotation-3.0.1.tgz#4cf51d9797bf3202788ca0beae8694404621ad19"
+  integrity sha512-hlIrXXKqSDgb+ZjVYHefmlZUXK8KbkCPiynSVrTb/HjTMkT62cOInaT1NTQCKtxKKOm9oHp958DY3RTAFKtkHg==
+
+chartjs-plugin-labels@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/chartjs-plugin-labels/-/chartjs-plugin-labels-1.1.0.tgz#3a040fa78994e8c482ca4d47426d1e894fe679f5"
+  integrity sha512-ab1oiQT7oMnpYDn6h8biL7VZM0qIxtwfhQw1+qH7xe7Ia6lBKX/ks5rEhgI6CZ4PlRRgDFGK9Mf/T2SO9l+NCA==
 
 check-types@^11.1.1:
   version "11.2.2"
@@ -9364,6 +9386,11 @@ react-app-rewired@^2.2.1:
   integrity sha512-uFQWTErXeLDrMzOJHKp0h8P1z0LV9HzPGsJ6adOtGlA/B9WfT6Shh4j2tLTTGlXOfiVx6w6iWpp7SOC5pvk+gA==
   dependencies:
     semver "^5.6.0"
+
+react-chartjs-2@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/react-chartjs-2/-/react-chartjs-2-5.2.0.tgz#43c1e3549071c00a1a083ecbd26c1ad34d385f5d"
+  integrity sha512-98iN5aguJyVSxp5U3CblRLH67J8gkfyGNbiK3c+l1QI/G4irHMPQw44aEPmjVag+YKTyQ260NcF82GTQ3bdscA==
 
 react-copy-to-clipboard@^5.1.0:
   version "5.1.0"

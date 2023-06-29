@@ -1,39 +1,50 @@
-import LogoFull from "../assets/LogoFull.svg";
+import { useState } from "react";
+import LogoFull from "../assets/LogoFull.png";
 import NavbarWrapper from "../components/NavbarWrapper";
 import { Container, Button } from "reactstrap";
 import HowToPlay from "../components/modals/HowToPlay";
-import { Link } from "react-router-dom";
+import SelectWallet from "../components/modals/SelectWallet";
+import { useNavigate } from "react-router-dom";
+import { useAppContext } from "../context/AppContext";
 
 function Home() {
-  return (
-    <div className=" bg-overlay">
-      <Container>
-        <NavbarWrapper />
+  const { address } = useAppContext();
+  const navigate = useNavigate();
+  const [showModal, shouldShowModal] = useState(false);
 
-        <div className="text-center mt-5 ">
-          <img
-            src={LogoFull}
-            alt=""
-            className="img-fluid mx-auto d-block mb-3 text-center"
-          />
-          <h1 className="text-5xl font-display font-bold mb-2">
-            KILL THEIR PET BEFORE <br />
-            THEY KILL YOURS
-          </h1>
-          <h4 className="mb-3">
-            Find and kill opponent's pet ceatures in our fun online PVP game and
-            earn tokes and <br />
-            rewards when you win big games
-          </h4>
-          <div>
-            <Link to="/game">
-              <Button className="me-2">Start playing</Button>
-            </Link>
-            <HowToPlay />
-          </div>
+  const handleClick = () => {
+    if (!address) {
+      shouldShowModal(true);
+      return;
+    }
+    navigate("/game");
+  };
+
+  return (
+    <Container>
+      <NavbarWrapper />
+
+      <div className="text-center mt-5 ">
+        <img
+          src={LogoFull}
+          alt=""
+          className="img-fluid mx-auto d-block mb-3 text-center"
+        />
+        <h1 className="text-5xl font-bold mb-2">Hatch, Battle, And Conquer!</h1>
+        <h4 className="mb-3">
+          Command your dragon eggs in the ultimate PvP showdown of Myth Arena,{" "}
+          <br />
+          where strategy meets the fiery might of mythical creatures.
+        </h4>
+        <div>
+          <Button className="me-2" onClick={handleClick}>
+            Start playing
+          </Button>
+          <HowToPlay />
+          {showModal && <SelectWallet button={true} />}
         </div>
-      </Container>
-    </div>
+      </div>
+    </Container>
   );
 }
 

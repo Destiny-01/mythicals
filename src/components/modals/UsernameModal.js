@@ -1,22 +1,38 @@
 import axios from "../../config/axios";
 import React, { useState } from "react";
 import { Button, Modal, InputGroup, Input } from "reactstrap";
+import { useNavigate } from "react-router-dom";
+import { useAppContext } from "../../context/AppContext";
 
-export default function UsernameModal({ isToggled, setIsToggled }) {
+export default function UsernameModal({
+  isToggled,
+  setIsToggled,
+  address,
+  provider,
+}) {
   const [username, setUsername] = useState("");
+  const navigate = useNavigate();
+  const { setAddress, setProvider } = useAppContext();
+  console.log(isToggled);
+
   const onClick = () => {
     if (username.length === 0) {
       return;
     }
     axios
       .post("/api/username", {
-        address:
-          window.ethereum?.selectedAddress || localStorage.getItem("address"),
+        address,
         username,
       })
       .then((res) => {
-        setIsToggled(false);
-        window.location.reload();
+        if (res.data.success) {
+          setIsToggled(false);
+          setAddress(address);
+          setProvider(provider);
+          navigate("/welcome");
+        } else {
+          alert("something went wrong");
+        }
       })
       .catch((err) => console.log(err));
   };

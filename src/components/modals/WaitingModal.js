@@ -2,36 +2,13 @@ import React, { useState } from "react";
 import { Button, Modal, InputGroup, Input } from "reactstrap";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import axios from "../../config/axios";
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useAppContext } from "../../context/AppContext";
 
 export default function WaitingModal({ code, submit }) {
   const [isToggled, setIsToggled] = useState(true);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [inpCode, setCode] = useState("");
-  const [address, setAddress] = useState(false);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchAccounts = async () => {
-      try {
-        const accounts = await window.ethereum?.request({
-          method: "eth_accounts",
-        });
-        if (accounts?.length > 0 || localStorage.getItem("address")) {
-          setAddress(
-            accounts?.length ? accounts[0] : localStorage.getItem("address")
-          );
-        } else {
-          navigate("/game");
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    fetchAccounts();
-  }, [navigate]);
+  const { address } = useAppContext();
 
   const onClick = () => {
     if (!code) {
@@ -43,7 +20,7 @@ export default function WaitingModal({ code, submit }) {
         .then((res) => {
           if (res && res.data.success) {
             setIsSubmitted(true);
-            submit(inpCode);
+            submit(inpCode, res.data.data);
             setIsToggled(false);
           }
         })
