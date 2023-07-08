@@ -22,12 +22,14 @@ const gameSchema = new mongoose.Schema(
         {
           guess: String,
           status: String,
+          injured: String,
         },
       ],
       player2: [
         {
           guess: String,
           status: String,
+          injured: String,
         },
       ],
     },

@@ -37,14 +37,20 @@ const checkCode = async (req, res) => {
         .json({ success: false, message: "Kindly connect your wallet" });
     }
 
-    const game = await Game.findOne({ id: code });
+    const game = await Game.findOne({ id: code }).populate("players");
     if (!game || game.players.length !== 1) {
       return res
         .status(500)
         .json({ success: false, message: "Invalid game code" });
     }
 
-    return res.status(200).json({ success: true });
+    game.players.push(player._id);
+    await game.save();
+
+    return res.status(200).json({
+      success: true,
+      data: { player1: game.players[0], player2: player },
+    });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ success: false, message: err.message });
@@ -95,7 +101,6 @@ const joinGame = async (req, res) => {
       { id },
       {
         "solution.player2": solution,
-        $push: { players: player._id },
         active: true,
       },
       { new: true }
@@ -130,7 +135,7 @@ const guessCode = async (req, res) => {
         .status(500)
         .json({ success: false, message: "Not your turn to guess" });
     }
-    const status =
+    const { injured, status } =
       game.turn === 1
         ? getStatus(guess, game.solution.player2)
         : getStatus(guess, game.solution.player1);
@@ -146,10 +151,10 @@ const guessCode = async (req, res) => {
     }
 
     if (game.turn === 1) {
-      game.guesses.player1.push({ guess, status });
+      game.guesses.player1.push({ guess, status, injured });
       game.turn = 2;
     } else {
-      game.guesses.player2.push({ guess, status });
+      game.guesses.player2.push({ guess, status, injured });
       game.turn = 1;
     }
 
@@ -163,8 +168,7 @@ const guessCode = async (req, res) => {
 
 const getGame = async (req, res) => {
   try {
-    const { id } = req.params;
-    const { address } = req.body;
+    const { id, address } = req.query;
 
     const game = await Game.findOne({ id }).populate("players");
     if (!game) {
@@ -174,6 +178,7 @@ const getGame = async (req, res) => {
     }
 
     const player = await Player.findOne({ address });
+    console.log(game, player);
     const playerNumber = game.players[0]._id.equals(player._id)
       ? 1
       : game.players[1]._id.equals(player._id)

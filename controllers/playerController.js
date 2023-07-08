@@ -36,7 +36,7 @@ exports.updateUsername = async (req, res) => {
     player.avatar = Math.floor(Math.random() * 2);
     await player.save();
 
-    return res.status(200).json({ msg: "success" });
+    return res.status(200).json({ success: true });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ success: false, error: err.message });
@@ -45,8 +45,8 @@ exports.updateUsername = async (req, res) => {
 
 exports.getPlayer = async (req, res) => {
   try {
-    const { id } = req.params;
-    const player = await Player.findById(id);
+    const { address } = req.params;
+    const player = await Player.findOne({ address });
 
     if (!player) {
       return res
