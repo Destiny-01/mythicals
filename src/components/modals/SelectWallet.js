@@ -67,7 +67,6 @@ export default function SelectWallet({ button }) {
         isOpen={isToggled}
         toggle={() => setIsToggled(!isToggled)}
         centered
-        backdrop="static"
         className="select-modal"
       >
         <ModalBody>
