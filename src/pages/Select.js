@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Button,
   Card,
@@ -11,20 +12,58 @@ import {
   Row,
 } from "reactstrap";
 import NavbarWrapper from "../components/NavbarWrapper";
-// import PerkWheel from "../components/PerkWheel";
+import PerkWheel from "../components/PerkWheel";
+import { useGameContext } from "../context/GameContext";
+import { usePlayerContext } from "../context/PlayerContext";
+import { initGame } from "../utils/contract";
 import User1 from "../assets/lobby/User1.png";
 import User2 from "../assets/lobby/User2.png";
 import Versus from "../assets/lobby/versus.png";
 import LogoRound from "../assets/Logo.png";
 import { CurrentRow } from "../components/grid/CurrentRow";
 import Keyboard from "../components/keyboard/Keyboard";
-import { Link } from "react-router-dom";
-import PerkWheel from "../components/PerkWheel";
+import Lock from "../assets/icons/lock.svg";
+import Edit from "../assets/icons/edit.svg";
+import ConfirmModal from "../components/modals/ConfirmModal";
 
 export default function Select({ socket }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isGameStarted, setIsGameStarted] = useState(false);
   const [currentGuess, setCurrentGuess] = useState("");
+  const [player, setPlayer] = useState(0);
   const [canEdit, setCanEdit] = useState(false);
   const [time, setTime] = useState(20);
+  const { game, setGame } = useGameContext();
+  const { address } = usePlayerContext();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (game) {
+      console.log(game.player1.address, address);
+      if (game.player1.address === address) {
+        setPlayer(1);
+      } else if (game.player2.address === address) {
+        setPlayer(2);
+      }
+    }
+
+    socket.on("init", (id, gameCode) => {
+      console.log("init", id, game.code);
+      if ((id === 1 && player === 1) || (id === 2 && player === 2)) {
+        setGame((currentGame) => ({ ...currentGame, code: gameCode, time }));
+        navigate("/room/" + gameCode);
+      }
+    });
+
+    socket.on("time", (time) => {
+      console.log(time);
+      setTime(time);
+    });
+
+    socket.on("joinedGame", () => {
+      setIsGameStarted(true);
+    });
+  }, [address, game, navigate, player, setGame, socket, time]);
 
   const onChar = (value) => {
     if (currentGuess.length < 5) {
@@ -36,9 +75,12 @@ export default function Select({ socket }) {
     setCurrentGuess(currentGuess.slice(0, -1));
   };
 
-  const handleSubmit = () => {};
+  const handleSubmitTime = () => {
+    setCanEdit(false);
+    socket.emit("time", time);
+  };
 
-  const onEnter = async () => {
+  const handleSubmit = async () => {
     const guessArr = String(currentGuess)
       .split("")
       .map((currentGuess) => {
@@ -47,14 +89,33 @@ export default function Select({ socket }) {
 
     if (
       currentGuess.length !== 5 ||
-      !window.location.pathname.startsWith("/egg") ||
+      !window.location.pathname.startsWith("/select") ||
       !guessArr.every((e, i, a) => a.indexOf(e) === i)
-      //  ||
-      //  !address
     ) {
-      return;
+      return alert("An error occurred. You must choose 5 unique eggs");
+    }
+
+    setIsOpen(true);
+    const tx = await initGame(game.code, guessArr, player - 1);
+    setIsOpen(false);
+
+    if (tx) {
+      console.log(tx);
+      socket.emit(
+        player === 1 ? "newGame" : "joinGame",
+        game.code,
+        currentGuess,
+        address,
+        time
+      );
+    } else {
+      alert("An error occurred. Try sending again");
     }
   };
+
+  if (!address) {
+    return navigate("/game");
+  }
 
   return (
     <Container>
@@ -67,6 +128,10 @@ export default function Select({ socket }) {
             </CardTitle>
             <CardBody>
               <PerkWheel />
+              <div className="position-absolute left-30 text-center">
+                <img src={Lock} alt="" />
+                <h5> Coming Soon</h5>
+              </div>
             </CardBody>
           </Card>
         </Col>
@@ -75,7 +140,7 @@ export default function Select({ socket }) {
             <Col>
               <img src={User1} height={60} alt="" />
               <div className="lobby-text">
-                <p>Vello</p>
+                <p>{game.player1.username}</p>
               </div>
             </Col>
             <Col>
@@ -84,7 +149,7 @@ export default function Select({ socket }) {
             <Col>
               <img src={User2} height={60} alt="" />
               <div className="lobby-text">
-                <p>diac</p>
+                <p>{game.player2.username}</p>
               </div>
             </Col>
           </Row>
@@ -105,7 +170,6 @@ export default function Select({ socket }) {
           <Keyboard
             onChar={onChar}
             onDelete={onDelete}
-            onEnter={onEnter}
             isTurn={true}
             currentGuess={currentGuess}
           />
@@ -147,31 +211,46 @@ export default function Select({ socket }) {
                   step={5}
                   onChange={(e) => setTime(e.target.value)}
                 />
-                {canEdit ? (
+                {console.log(player, canEdit)}
+                {canEdit && player === 1 ? (
                   <div
                     className="pe-3"
                     role="button"
-                    onClick={() => setCanEdit(false)}
+                    onClick={handleSubmitTime}
                   >
                     <i className="bi bi-save" role="button"></i>
                   </div>
                 ) : (
-                  <div
-                    className="pe-3"
-                    role="button"
-                    onClick={() => setCanEdit(true)}
-                  >
-                    <i className="bi bi-pencil" role="button"></i>
-                  </div>
+                  player === 1 && (
+                    <div
+                      className="pe-3"
+                      role="button"
+                      onClick={() => setCanEdit(true)}
+                    >
+                      <img src={Edit} alt="" />
+                    </div>
+                  )
                 )}
               </InputGroup>
-              <Button block onClick={handleSubmit}>
-                Start Game
+              <Button
+                block
+                onClick={handleSubmit}
+                className={!isGameStarted && player === 2 && "fst-italic"}
+                disabled={
+                  currentGuess.length !== 5 || (!isGameStarted && player === 2)
+                }
+              >
+                {isGameStarted
+                  ? "Join Game"
+                  : player === 1
+                  ? "Start Game"
+                  : "waiting for opponent to enter game"}
               </Button>
             </CardBody>
           </Card>
         </Col>
       </Row>
+      <ConfirmModal isOpen={isOpen} />
     </Container>
   );
 }

@@ -2,20 +2,23 @@ import { useState, useEffect } from "react";
 import { Col, Container, Row } from "reactstrap";
 import NavbarWrapper from "../components/NavbarWrapper";
 import Keyboard from "../components/keyboard/Keyboard";
-// import { mintNFT } from "../utils/contract";
 import { Grid } from "../components/grid/Grid";
 import { useParams } from "react-router-dom";
 import WinGame from "../components/modals/WinGame";
 import LoseGame from "../components/modals/LoseGame";
 import axios from "../config/axios";
 import Timer from "../components/Timer";
-import { useAppContext } from "../context/AppContext";
+import { usePlayerContext } from "../context/PlayerContext";
+import { wonGame } from "../utils/contract";
+import { randomNumbers } from "../utils";
+import ConfirmModal from "../components/modals/ConfirmModal";
 
 export default function Arena({ socket }) {
   const [currentGuess, setCurrentGuess] = useState("");
   const [solution, setSolution] = useState("");
   const [key, setKey] = useState(0);
   const [players, setPlayers] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
   const [isGameWon, setIsGameWon] = useState(false);
   const [isGameLost, setIsGameLost] = useState(false);
   const [isGameEnded, setIsGameEnded] = useState(false);
@@ -28,8 +31,10 @@ export default function Arena({ socket }) {
   const [opponentGuesses, setOpponentGuesses] = useState([]);
   const [myStatus, setMyStatus] = useState([]);
   const [opponentStatus, setOpponentStatus] = useState([]);
+  const [myInjuredStatus, setMyInjuredStatus] = useState([]);
+  const [opponentInjuredStatus, setOpponentInjuredStatus] = useState([]);
   const { id } = useParams();
-  const { address } = useAppContext();
+  const { address } = usePlayerContext();
 
   useEffect(() => {
     socket.on("myGuess", (game) => {
@@ -37,12 +42,13 @@ export default function Arena({ socket }) {
         if (game.turn === 2) {
           setMyGuesses(game.guesses.player1.map((x) => x.guess));
           setMyStatus(game.guesses.player1.map((x) => x.status));
-          setTurn(false);
+          setMyInjuredStatus(game.guesses.player1.map((x) => x.injured));
         } else if (game.turn === 1) {
           setMyGuesses(game.guesses.player2.map((x) => x.guess));
           setMyStatus(game.guesses.player2.map((x) => x.status));
-          setTurn(false);
+          setMyInjuredStatus(game.guesses.player2.map((x) => x.injured));
         }
+        setTurn(false);
       }
     });
 
@@ -51,14 +57,14 @@ export default function Arena({ socket }) {
         if (game.turn === 1) {
           setOpponentGuesses(game.guesses.player2.map((x) => x.guess));
           setOpponentStatus(game.guesses.player2.map((x) => x.status));
-          setTurn(true);
-          setIsPlaying(true);
+          setOpponentInjuredStatus(game.guesses.player2.map((x) => x.injured));
         } else if (game.turn === 2) {
           setOpponentGuesses(game.guesses.player1.map((x) => x.guess));
           setOpponentStatus(game.guesses.player1.map((x) => x.status));
-          setTurn(true);
-          setIsPlaying(true);
+          setOpponentInjuredStatus(game.guesses.player1.map((x) => x.injured));
         }
+        setTurn(true);
+        setIsPlaying(true);
       }
     });
 
@@ -86,7 +92,7 @@ export default function Arena({ socket }) {
       }
     });
 
-    socket.on("joined", (players) => {
+    socket.on("joinedGame", (players) => {
       setIsGameStarted(true);
       setPlayers(players);
     });
@@ -95,9 +101,8 @@ export default function Arena({ socket }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.post("/api/game/" + id, {
-          address,
-        });
+        const res = await axios.get(`/api/game?id=${id}&address=${address}`);
+        console.log(res);
 
         if (res.data.data) {
           const game = res.data.data;
@@ -115,8 +120,12 @@ export default function Arena({ socket }) {
             setIsGameEnded(true);
           }
 
-          ((!game.active && game.players.length === 1) || game.active) &&
+          if (
+            (!game.active && game.players[0].address === address) ||
+            game.active
+          ) {
             setSolution(game.solution.player1 || game.solution.player2);
+          }
         }
       } catch (err) {
         console.log(err);
@@ -127,16 +136,34 @@ export default function Arena({ socket }) {
   }, [address, id]);
 
   const onComplete = (t) => {
-    if (t === duration) {
-      let guess = "";
-      const characters = "01234567890";
-      while (guess.length < 5) {
-        const input = characters.charAt(
-          Math.floor(Math.random() * characters.length)
-        );
-        guess += !guess.includes(input) ? input : "";
-      }
-      onEnter(guess);
+    if (t === duration && !isGameEnded) {
+      onEnter(randomNumbers(5));
+    }
+  };
+
+  const handleWonGame = async () => {
+    if (!isGameWon && !isGameEnded) {
+      return alert("Game in progress");
+    }
+    setIsOpen(true);
+
+    const eggs = randomNumbers(5).split("").map(Number);
+    const data = {
+      player1: players[0].address,
+      player2: players[1].address,
+      solution1: players[0].address === address ? solution : oppSol,
+      solution2: players[0].address !== address ? solution : oppSol,
+      guesses1: players[0].address === address ? myGuesses : opponentGuesses,
+      guesses2: players[0].address !== address ? myGuesses : opponentGuesses,
+      winner: address,
+    };
+    const tx = await wonGame(id, eggs, data);
+
+    console.log(tx);
+    setIsOpen(false);
+    setIsGameWon(false);
+    if (!tx) {
+      alert("An error occurred");
     }
   };
 
@@ -151,11 +178,7 @@ export default function Arena({ socket }) {
   };
 
   const onEnter = (guess) => {
-    const guessArr = String(currentGuess)
-      .split("")
-      .map((currentGuess) => {
-        return Number(currentGuess);
-      });
+    const guessArr = String(currentGuess).split("").map(Number);
     if (
       (currentGuess.length !== 5 && guess.length !== 5) ||
       !guessArr.every((e, i, a) => a.indexOf(e) === i)
@@ -175,28 +198,29 @@ export default function Arena({ socket }) {
 
   return (
     <div className="position-relative" style={{ height: "100dvh" }}>
-      <Container>
+      <Container className="pb-3">
         <NavbarWrapper />
         <WinGame
-          isOpen={isGameWon}
-          mint={() => {}}
-          // mintNFT(id, isGameWon)
-          //   .then((res) => setIsGameWon(false))
-          //   .catch((err) => console.log(err))
-
+          isOpen={isGameWon && !isGameLost}
+          mint={handleWonGame}
           onClose={() => setIsGameWon(false)}
         />
-        <LoseGame isOpen={isGameLost} onClose={() => setIsGameLost(false)} />
+        <LoseGame
+          isOpen={isGameLost && !isGameWon}
+          onClose={() => setIsGameLost(false)}
+        />
+        <ConfirmModal isOpen={isOpen} />
 
-        <Row className="game-row mx-md-5 mt-3">
+        <Row className="game-row justify-content-between mx-md-5 mt-3">
           <Grid
             player={players.find((x) => x.address !== address)}
             address={address}
             guesses={myGuesses}
             currentGuess={currentGuess}
             solution={oppSol}
-            status={myStatus}
             ready={isGameStarted}
+            status={myStatus}
+            injuredStatus={myInjuredStatus}
           />
           <Col md={2}>
             <Timer
@@ -214,6 +238,7 @@ export default function Arena({ socket }) {
             currentGuess={""}
             solution={solution}
             status={opponentStatus}
+            injuredStatus={opponentInjuredStatus}
             ready={true}
           />
         </Row>

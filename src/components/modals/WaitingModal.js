@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { Button, Modal, InputGroup, Input } from "reactstrap";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import axios from "../../config/axios";
-import { useAppContext } from "../../context/AppContext";
+import { usePlayerContext } from "../../context/PlayerContext";
 
 export default function WaitingModal({ code, submit }) {
   const [isToggled, setIsToggled] = useState(true);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [inpCode, setCode] = useState("");
-  const { address } = useAppContext();
+  const { address } = usePlayerContext();
 
   const onClick = () => {
     if (!code) {

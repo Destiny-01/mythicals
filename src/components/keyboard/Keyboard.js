@@ -1,6 +1,6 @@
 import React from "react";
 import { Key } from "./Key";
-import { Container, Row } from "reactstrap";
+import { Row } from "reactstrap";
 import { eggsArray } from "../../data/eggsArray";
 import { Link } from "react-router-dom";
 
@@ -25,7 +25,7 @@ export default function Keyboard({
   };
 
   return (
-    <Container className="keyboard  mb-3 position-absolute bottom-0 start-50 translate-middle-x">
+    <div className="keyboard  mb-3">
       <div
         className={
           !isTurn ||
@@ -67,7 +67,7 @@ export default function Keyboard({
           {window.location.pathname.startsWith("/room") ? (
             <Key id="submit" state="default" onClick={onClick} />
           ) : (
-            <Key id="null" state="null" onClick={onClick} />
+            <Key id="null" state="null" />
           )}
 
           {eggsArray.slice(6, 10).map((egg) => {
@@ -117,6 +117,6 @@ export default function Keyboard({
           </p>
         </Row>
       )}
-    </Container>
+    </div>
   );
 }

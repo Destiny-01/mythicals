@@ -8,7 +8,7 @@ import WaitingModal from "../components/modals/WaitingModal";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import EditGameSettings from "../components/modals/EditGameSettings";
-import { useAppContext } from "../context/AppContext";
+import { usePlayerContext } from "../context/PlayerContext";
 
 export default function SelectEgg({ socket }) {
   const { id } = useParams();
@@ -17,7 +17,7 @@ export default function SelectEgg({ socket }) {
   const [code, setCode] = useState(query.get("code") || id || "");
   const [time, setTime] = useState(20);
   const navigate = useNavigate();
-  const { address } = useAppContext();
+  const { address } = usePlayerContext();
 
   useEffect(() => {
     socket.on("init", (id, gameCode) => {

@@ -6,10 +6,10 @@ export default function ConfirmModal({ isOpen }) {
     <div>
       <Modal isOpen={isOpen} centered backdrop="static" className="waiting">
         <div className=" text-center">
-          <p className="mb-0">Waiting for verification</p>
+          <p className="mb-0">Waiting for confirmation</p>
           <p className="caption">
-            please confirm transaction in metamask. Popup usually takes around
-            some seconds to appear
+            Please confirm transaction in metamask and wait for confirmation.
+            This may take some few seconds
           </p>
         </div>
       </Modal>

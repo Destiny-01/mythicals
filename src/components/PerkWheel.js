@@ -94,7 +94,7 @@ export default function PerkWheel() {
   };
 
   return (
-    <>
+    <div className="perk-wheel">
       <div className="chart-container">
         <div className="perks-wrapper">
           {console.log(selectedPerks)}
@@ -157,6 +157,6 @@ export default function PerkWheel() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

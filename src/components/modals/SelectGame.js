@@ -3,14 +3,14 @@ import { Button, ModalBody, Modal } from "reactstrap";
 import Logo from "../../assets/Logo.png";
 import { useNavigate } from "react-router-dom";
 import SelectWallet from "./SelectWallet";
-import { useAppContext } from "../../context/AppContext";
+import { usePlayerContext } from "../../context/PlayerContext";
 
 export default function SelectGame({ socket }) {
   const [isToggled, setIsToggled] = useState(false);
   const [disabled, setDisabled] = useState(0);
   const [unAuthenticated, setUnAuthenticated] = useState(false);
   const navigate = useNavigate();
-  const { address } = useAppContext();
+  const { address } = usePlayerContext();
 
   useEffect(() => {
     socket.on("code", (code) => {

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Col, Container, Input, InputGroup, Row } from "reactstrap";
 import { useLocation, useNavigate } from "react-router-dom";
 import CopyToClipboard from "react-copy-to-clipboard";
-import { useAppContext } from "../context/AppContext";
+import { usePlayerContext } from "../context/PlayerContext";
 import Versus from "../assets/lobby/versus.png";
 import User1 from "../assets/lobby/User1.png";
 import User2 from "../assets/lobby/User2.png";
@@ -10,12 +10,14 @@ import UserDefault from "../assets/lobby/Default.png";
 import CopyIcon from "../assets/icons/copy.svg";
 import CheckIcon from "../assets/icons/check.svg";
 import SendIcon from "../assets/icons/submit.svg";
+import { useGameContext } from "../context/GameContext";
 
 export default function Lobby({ socket }) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [inpCode, setCode] = useState("");
   const [otherPlayer, setOtherPlayer] = useState(null);
-  const { address, player } = useAppContext();
+  const { address, player } = usePlayerContext();
+  const { setGame } = useGameContext();
   const query = useQuery();
   const navigate = useNavigate();
   const code = query.get("code");
@@ -29,18 +31,18 @@ export default function Lobby({ socket }) {
   useEffect(() => {
     socket.on("joined", (player1) => {
       if (code) {
-        setOtherPlayer(player1.username);
+        setOtherPlayer(player1);
         setTimeout(() => {
-          navigate("/room/" + code);
+          navigate("/select-egg");
         }, 3000);
       }
     });
 
     socket.on("player1", (player) => {
       if (!code) {
-        setOtherPlayer(player.username);
+        setOtherPlayer(player);
         setTimeout(() => {
-          navigate("/room/" + code);
+          navigate("/select-egg");
         }, 3000);
       }
     });
@@ -50,6 +52,16 @@ export default function Lobby({ socket }) {
       alert("Invalid code. If code is correct, try reloading the page");
     });
   }, [code, navigate, socket]);
+
+  useEffect(() => {
+    console.log("called", code, otherPlayer, player);
+    setGame((currGame) => ({
+      ...currGame,
+      player1: !code ? otherPlayer : player,
+      player2: code ? otherPlayer : player,
+      code: code || inpCode,
+    }));
+  }, [code, otherPlayer, player, setGame, inpCode]);
 
   const onClick = () => {
     if (isSubmitted) {
@@ -92,7 +104,7 @@ export default function Lobby({ socket }) {
           <Col>
             <img src={User1} alt="" />
             <div className="lobby-text">
-              <p>{otherPlayer}</p>
+              <p>{otherPlayer.username}</p>
             </div>
           </Col>
         ) : (
@@ -117,7 +129,7 @@ export default function Lobby({ socket }) {
           <Col>
             <img src={User2} alt="" />
             <div className="lobby-text">
-              <p>{otherPlayer}</p>
+              <p>{otherPlayer.username}</p>
             </div>
           </Col>
         ) : (

@@ -1,5 +1,5 @@
 {
-  "address": "0xf003bDA782Ce74F9c938AC9d3AA0927a5880Cd27",
+  "address": "0x262C2dadDD96eed834A070b44C6C810c2d7872D0",
   "abi": [
     {
       "inputs": [],
@@ -111,7 +111,13 @@
       "type": "function"
     },
     {
-      "inputs": [],
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "receiver",
+          "type": "address"
+        }
+      ],
       "name": "tokenInitialMint",
       "outputs": [],
       "stateMutability": "nonpayable",
@@ -276,6 +282,25 @@
           "internalType": "string",
           "name": "",
           "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "totalMinted",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
         }
       ],
       "stateMutability": "view",

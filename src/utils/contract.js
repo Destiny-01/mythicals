@@ -6,6 +6,7 @@ const provider = window.provider
   ? window.provider
   : new providers.Web3Provider(window.ethereum);
 const signer = provider.getSigner();
+
 export const tokenContract = new ethers.Contract(
   MythToken.address,
   MythToken.abi,
@@ -16,10 +17,35 @@ export const contract = new ethers.Contract(Myth.address, Myth.abi, signer);
 export const initialMint = async () => {
   try {
     const res = await contract.initialMint();
-    await res.wait();
-    if (res.transactionHash) {
-      return res.transactionHash;
-    }
+    const tx = await res.wait();
+    console.log(tx, res);
+    return tx?.transactionHash;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+export const initGame = async (id, eggs, action) => {
+  console.log(id, eggs, action);
+  try {
+    const res = await contract.initGame(id, eggs, action);
+    const tx = await res.wait();
+    console.log(tx);
+    return tx?.transactionHash;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+export const wonGame = async (id, eggs, game) => {
+  console.log(id, eggs, game);
+  try {
+    const res = await contract.wonGame(id, eggs, game);
+    const tx = await res.wait();
+    console.log(tx);
+    return tx?.transactionHash;
   } catch (err) {
     console.log(err);
     return null;
@@ -31,7 +57,7 @@ export const getBalance = async (address) => {
     const res = await tokenContract.balanceOf(address);
     console.log(res);
 
-    return utils.formatEther(res.toString());
+    return Math.floor(utils.formatEther(res.toString()));
   } catch (err) {
     console.log(err);
     return null;

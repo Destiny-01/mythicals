@@ -10,30 +10,32 @@ import { disconnectWalletConnect } from "../utils/connect";
 import axios from "../config/axios";
 import { getBalance } from "../utils/contract";
 
-export const AppContext = createContext({
+export const PlayerContext = createContext({
   address: null,
   provider: "",
-  setAddress: () => {},
+  setAddress: (address) => {},
   setProvider: (provider) => {},
   disconnect: () => {},
   player: {
     username: "",
+    address: "",
     avatar: "",
-    winds: "",
+    wins: "",
     losses: "",
   },
   balance: "",
   setBalance: (balance) => {},
 });
 
-export const AppProvider = ({ children }) => {
+export const PlayerProvider = ({ children }) => {
   const [address, setAddress] = useState(null);
   const [provider, setProvider] = useState(localStorage.getItem("provider"));
   const [balance, setBalance] = useState(0);
   const [player, setPlayer] = useState({
     username: "",
+    address,
     avatar: "",
-    winds: "",
+    wins: "",
     losses: "",
   });
   const disconnect = useCallback(async () => {
@@ -59,7 +61,10 @@ export const AppProvider = ({ children }) => {
   );
 
   useEffect(() => {
-    address && getBalance(address).then((bal) => setBalance(bal));
+    if (address) {
+      getBalance(address).then((bal) => setBalance(bal));
+      setPlayer((prevPlayer) => ({ ...prevPlayer, address }));
+    }
   }, [address]);
 
   useEffect(() => {
@@ -112,15 +117,15 @@ export const AppProvider = ({ children }) => {
   }, [disconnect, provider]);
 
   return (
-    <AppContext.Provider value={value}>
+    <PlayerContext.Provider value={value}>
       {useMemo(
         () => (
           <>{children}</>
         ),
         [children]
       )}
-    </AppContext.Provider>
+    </PlayerContext.Provider>
   );
 };
 
-export const useAppContext = () => useContext(AppContext);
+export const usePlayerContext = () => useContext(PlayerContext);

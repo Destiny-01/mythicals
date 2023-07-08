@@ -1,9 +1,8 @@
 import React from "react";
 import deadEgg from "../../assets/eggState/dead.svg";
-import injuredEgg from "../../assets/eggState/injured.svg";
 import { eggsArray } from "../../data/eggsArray";
 import eggDefault from "../../assets/eggs/eggDefault.svg";
-import eggUnknown from "../../assets/eggs/eggUnknown.svg";
+import eggUnknown from "../../assets/eggs/eggUnknown.png";
 import { Col } from "reactstrap";
 
 export function Cell({ id, state }) {
@@ -12,14 +11,10 @@ export function Cell({ id, state }) {
       status: "dead",
       image: deadEgg,
     },
-    {
-      status: "injured",
-      image: injuredEgg,
-    },
   ];
 
   return (
-    <Col className="position-relative cell mx-2">
+    <Col className="position-relative cell">
       {state === "unknown" ? (
         <img src={eggUnknown} alt="" />
       ) : state !== "default" ? (

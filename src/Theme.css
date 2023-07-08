@@ -170,13 +170,13 @@ h2 {
 .lobby-text p {
   border-radius: 2px;
   color: rgba(255, 255, 255, 0.8);
-  background: var(--background, #1f272a);
+  background: #1f272a;
   padding: 8px 24px;
   box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.5) inset;
   margin-bottom: 0;
 }
 
-.lobby-text.italic p {
+.lobby-text.italics p {
   font-style: italic;
 }
 
@@ -226,7 +226,13 @@ h2 {
 
 .guesscard {
   background: var(--card);
+  max-width: fit-content;
   padding: 16px;
+  border-radius: 6px;
+  background: var(--card, #2d515d);
+  box-shadow: 0px 18px 36px 0px rgba(0, 0, 0, 0.15),
+    -4px -4px 8px 0px rgba(0, 0, 0, 0.3) inset,
+    4px 4px 8px 0px rgba(255, 255, 255, 0.3) inset;
 }
 
 .caption {
@@ -281,11 +287,47 @@ h5 {
   font-family: "Open Sans", sans-serif;
 }
 
-.guesses {
+.guesses,
+.aside {
   max-height: 300px;
-  overflow-x: hidden;
-  overflow-y: scroll;
+  flex-wrap: wrap;
+  overflow: clip scroll;
   /* padding-right: 400px; */
+}
+
+.guesses .row {
+  margin-bottom: 4px;
+}
+
+.guess p.mb-0 {
+  font-size: 24px;
+}
+
+.game-row > .col {
+  max-width: fit-content;
+}
+
+.game-row .col:last-of-type .aside {
+  left: -24%;
+}
+
+.aside {
+  position: absolute;
+  top: 0;
+  right: -24%;
+  height: 300px;
+  width: fit-content;
+}
+
+.aside > div {
+  margin-bottom: 4px;
+  height: 70px;
+}
+
+.bottom-border {
+  margin-top: 12px;
+  border-top: 4px solid var(--line);
+  opacity: 1;
 }
 
 .loggedin {
@@ -306,7 +348,22 @@ h5 {
 }
 
 .keyboard {
-  padding: 0;
+  border-radius: 6px;
+  background: #5d3430;
+  box-shadow: -4px -4px 8px 0px rgba(0, 0, 0, 0.3) inset,
+    4px 4px 8px 0px rgba(255, 255, 255, 0.3) inset;
+  padding: 16px;
+  width: fit-content;
+  position: relative;
+  margin: 0 auto;
+  margin-top: 3rem;
+}
+
+.keyboard > div:first-of-type {
+  border-radius: 8px;
+  background: #411512;
+  box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.5) inset;
+  padding: 8px;
 }
 
 .keyboard .g-2 {
@@ -414,6 +471,19 @@ img[alt="eggNull"] {
   /* justify-content: space-between; */
 }
 
+/* disabled state */
+.perk-wheel {
+  cursor: not-allowed;
+  pointer-events: none;
+  position: relative;
+  opacity: 0.6;
+}
+
+.left-30 {
+  top: 30%;
+  left: 30%;
+}
+
 .perk {
   min-width: 90%;
 }
@@ -483,6 +553,10 @@ img[alt="eggNull"] {
 }
 
 .cell {
+  padding: 0;
+}
+
+.cell > img {
   width: 56px;
 }
 
@@ -552,11 +626,10 @@ img[alt="eggNull"] {
 .timer {
   text-align: center;
   margin: 12px;
-  font-size: 18px;
 }
 
-.timer .text {
-  font-size: 12px;
+.timer .red > h1 {
+  color: #f40101;
 }
 
 .game-mode-img {

@@ -14,12 +14,12 @@ import LogoRound from "../assets/LogoRoundThick.png";
 import Union from "../assets/Union.png";
 import SelectWallet from "./modals/SelectWallet";
 import Avatar1 from "../assets/Avatar1.png";
-import { useAppContext } from "../context/AppContext";
+import { usePlayerContext } from "../context/PlayerContext";
 
 export default function NavbarWrapper() {
   const [isToggled, setIsToggled] = useState(false);
   const [logoutToggle, setLogoutToggle] = useState(false);
-  const { address, disconnect, player, balance } = useAppContext();
+  const { address, disconnect, player, balance } = usePlayerContext();
 
   return (
     <div>

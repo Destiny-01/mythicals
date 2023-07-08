@@ -10,14 +10,14 @@ import {
   walletConnect,
 } from "../../utils/connect";
 import UsernameModal from "./UsernameModal";
-import { useAppContext } from "../../context/AppContext";
+import { usePlayerContext } from "../../context/PlayerContext";
 
 export default function SelectWallet({ button }) {
   const [isToggled, setIsToggled] = useState(button || false);
   const [isModalToggled, setIsModalToggled] = useState(false);
   const [address, setReturnedAddress] = useState("");
   const [provider, setReturnedProvider] = useState("");
-  const { setAddress, setProvider } = useAppContext();
+  const { setAddress, setProvider } = usePlayerContext();
   const connectMetamask = async () => {
     metamaskConnect().then((res) => {
       setIsToggled(false);

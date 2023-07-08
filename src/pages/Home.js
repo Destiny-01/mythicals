@@ -5,10 +5,10 @@ import { Container, Button } from "reactstrap";
 import HowToPlay from "../components/modals/HowToPlay";
 import SelectWallet from "../components/modals/SelectWallet";
 import { useNavigate } from "react-router-dom";
-import { useAppContext } from "../context/AppContext";
+import { usePlayerContext } from "../context/PlayerContext";
 
 function Home() {
-  const { address } = useAppContext();
+  const { address } = usePlayerContext();
   const navigate = useNavigate();
   const [showModal, shouldShowModal] = useState(false);
 

@@ -7,9 +7,7 @@ export const CurrentRow = ({ guess, select }) => {
 
   return (
     <Row
-      className={`row-cols-auto mb-2 g-2 ${
-        select && "justify-content-center"
-      } `}
+      className={select && "row-cols-auto gap-2 pt-3 justify-content-center"}
     >
       {splitGuess.map((letter, i) => (
         <Cell key={i} id={letter} select />

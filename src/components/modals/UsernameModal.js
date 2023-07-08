@@ -2,7 +2,7 @@ import axios from "../../config/axios";
 import React, { useState } from "react";
 import { Button, Modal, InputGroup, Input } from "reactstrap";
 import { useNavigate } from "react-router-dom";
-import { useAppContext } from "../../context/AppContext";
+import { usePlayerContext } from "../../context/PlayerContext";
 
 export default function UsernameModal({
   isToggled,
@@ -12,7 +12,7 @@ export default function UsernameModal({
 }) {
   const [username, setUsername] = useState("");
   const navigate = useNavigate();
-  const { setAddress, setProvider } = useAppContext();
+  const { setAddress, setProvider } = usePlayerContext();
   console.log(isToggled);
 
   const onClick = () => {

@@ -15,15 +15,14 @@ export default function WinGame({ isOpen, mint, onClose }) {
             className="img-fluid mx-auto d-block mb-4 "
           />
           <h5 className="mb-0 text-center">
-            Congratulations, You've won the game
+            Congratulations, You've won the game.
           </h5>
           <p className="caption text-center">
-            Here's a reward from the game master. You can mint the NFT below to
-            add to your collection
+            As a reward from the game master, you get back 5 random eggs
           </p>
 
           <Button className="" onClick={mint}>
-            Mint NFT
+            Claim Rewards
           </Button>
           <div className="mb-0 mt-2 text-center">
             <Link to="/game" className="text-underline">
