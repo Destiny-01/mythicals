@@ -54,10 +54,18 @@ export const wonGame = async (id, eggs, game) => {
 
 export const getBalance = async (address) => {
   try {
-    const res = await tokenContract.balanceOf(address);
-    console.log(res);
+    const balance = await tokenContract.balanceOf(address);
+    const addresses = Array(10).fill(address);
+    const eggs = await contract.balanceOfBatch(
+      addresses,
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+    );
+    console.log(balance, eggs);
 
-    return Math.floor(utils.formatEther(res.toString()));
+    return {
+      balance: Math.floor(utils.formatEther(balance.toString())),
+      eggsBalance: eggs.map(String),
+    };
   } catch (err) {
     console.log(err);
     return null;

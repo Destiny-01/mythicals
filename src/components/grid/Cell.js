@@ -22,16 +22,13 @@ export function Cell({ id, state }) {
       ) : (
         <img src={eggDefault} alt="" />
       )}
-      {state &&
-        state !== "default" &&
-        state !== "safe" &&
-        state !== "unknown" && (
-          <img
-            src={eggsState.find((el) => el.status === state).image}
-            className="position-absolute top-50 start-50 translate-middle"
-            alt=""
-          />
-        )}
+      {state && state !== "default" && state !== "_" && state !== "unknown" && (
+        <img
+          src={eggsState.find((el) => el.status === state).image}
+          className="position-absolute top-50 start-50 translate-middle"
+          alt=""
+        />
+      )}
     </Col>
   );
 }

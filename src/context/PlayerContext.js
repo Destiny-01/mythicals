@@ -22,6 +22,7 @@ export const PlayerContext = createContext({
     avatar: "",
     wins: "",
     losses: "",
+    balances: [],
   },
   balance: "",
   setBalance: (balance) => {},
@@ -33,6 +34,7 @@ export const PlayerProvider = ({ children }) => {
   const [balance, setBalance] = useState(0);
   const [player, setPlayer] = useState({
     username: "",
+    balances: [],
     address,
     avatar: "",
     wins: "",
@@ -62,8 +64,14 @@ export const PlayerProvider = ({ children }) => {
 
   useEffect(() => {
     if (address) {
-      getBalance(address).then((bal) => setBalance(bal));
-      setPlayer((prevPlayer) => ({ ...prevPlayer, address }));
+      getBalance(address).then((res) => {
+        setBalance(res.balance);
+        setPlayer((prevPlayer) => ({
+          ...prevPlayer,
+          balances: res.eggsBalance,
+          address,
+        }));
+      });
     }
   }, [address]);
 

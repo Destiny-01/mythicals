@@ -24,10 +24,10 @@ export default function SelectWallet({ button }) {
       localStorage.setItem("provider", "metamask");
       if (res.newUser) {
         setIsModalToggled(true);
-        setReturnedAddress(res.address);
         setReturnedProvider("metamask");
         return;
       }
+      setReturnedAddress(res.address);
       setProvider("metamask");
       setAddress(res.address);
     });
@@ -37,8 +37,8 @@ export default function SelectWallet({ button }) {
       setIsToggled(false);
       if (res.newUser) {
         setIsModalToggled(true);
-        setReturnedAddress(res.address);
       }
+      setReturnedAddress(res.address);
     });
   };
   const connectWallet = () => {
@@ -47,10 +47,10 @@ export default function SelectWallet({ button }) {
       setIsToggled(false);
       if (res.newUser) {
         setIsModalToggled(true);
-        setReturnedAddress(res.address);
         setReturnedProvider("walletConnect");
         return;
       }
+      setReturnedAddress(res.address);
       setAddress(res.address);
       setProvider("walletConnect");
     });

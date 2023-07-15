@@ -92,7 +92,7 @@ export default function Lobby({ socket }) {
   return (
     <Container className="lobby text-center">
       <h2 className="mb-5">Get Ready to Battle</h2>
-      <Row className="mt-5 mb-3">
+      <Row className="mb-3">
         {code ? (
           <Col>
             <img src={User1} alt="" />

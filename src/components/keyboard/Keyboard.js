@@ -13,6 +13,7 @@ export default function Keyboard({
   isTurn,
   isGameEnded,
   isGameStarted,
+  balances,
 }) {
   const onClick = (id) => {
     if (id === "submit") {
@@ -41,6 +42,7 @@ export default function Keyboard({
               <Key
                 key={egg.id}
                 id={egg.id}
+                balance={balances && balances[egg.id]}
                 state="dead"
                 image={egg.image}
                 onClick={onClick}
@@ -55,6 +57,7 @@ export default function Keyboard({
               <Key
                 key={egg.id}
                 id={egg.id}
+                balance={balances && balances[egg.id]}
                 state="dead"
                 image={egg.image}
                 onClick={onClick}
@@ -75,6 +78,7 @@ export default function Keyboard({
               <Key
                 key={egg.id}
                 id={egg.id}
+                balance={balances && balances[egg.id]}
                 state="injured"
                 onClick={onClick}
                 image={egg.image}

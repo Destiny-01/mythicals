@@ -22,7 +22,7 @@ export default function GameMode({ socket }) {
   return (
     <Container>
       <NavbarWrapper />
-      <div className=" mt-1 mb-3">
+      <div className="mb-3">
         <h2 className="text-center my-5">Choose a game mode</h2>
 
         <Row className="px-md-5 mx-md-5 mb-4">

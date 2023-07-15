@@ -29,6 +29,14 @@ body {
   font-family: "Lora", serif;
 }
 
+.navbar {
+  width: 80%;
+}
+
+.navbar ~ div {
+  margin-top: 8rem;
+}
+
 .nav-link {
   color: var(--white);
 }
@@ -131,7 +139,7 @@ h2 {
   border-color: rgba(255, 255, 255, 0.55);
 }
 
-.lobby {
+.container {
   height: 100dvh;
   display: flex;
   flex-direction: column;
@@ -200,6 +208,28 @@ h2 {
 
 .welcome .col:last-of-type h2 {
   margin-top: 50px;
+}
+
+.balance {
+  padding: 12px;
+  background-color: var(--secondary);
+  position: absolute;
+  bottom: 5px;
+  right: 6px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  border-radius: 50%;
+  box-shadow: -4px -4px 8px 0px rgba(0, 0, 0, 0.3) inset,
+    4px 4px 8px 0px rgba(255, 255, 255, 0.3) inset;
+}
+
+.balance p {
+  font-size: 12px;
+  font-weight: 700;
+  margin: 0;
 }
 
 .card.gamecard {
@@ -406,6 +436,14 @@ img[alt="eggNull"] {
   margin-top: 16px;
 }
 
+.select {
+  height: 400px;
+}
+
+.arena {
+  height: 600px;
+}
+
 .select .card {
   border-radius: 8px;
 }
@@ -467,10 +505,10 @@ img[alt="eggNull"] {
 
 /* disabled state */
 .perk-wheel {
-  cursor: not-allowed;
+  /* cursor: not-allowed;
   pointer-events: none;
   position: relative;
-  opacity: 0.6;
+  opacity: 0.6; */
 }
 
 .left-30 {
@@ -660,5 +698,11 @@ img[alt="eggNull"] {
 
   .guess {
     width: max-content;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .container {
+    max-width: 1140px;
   }
 }

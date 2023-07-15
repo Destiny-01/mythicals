@@ -12,6 +12,7 @@ import { usePlayerContext } from "../context/PlayerContext";
 import { wonGame } from "../utils/contract";
 import { randomNumbers } from "../utils";
 import ConfirmModal from "../components/modals/ConfirmModal";
+import PerkBox from "../components/perks/PerkBox";
 
 export default function Arena({ socket }) {
   const [currentGuess, setCurrentGuess] = useState("");
@@ -200,59 +201,65 @@ export default function Arena({ socket }) {
     <div className="position-relative" style={{ height: "100dvh" }}>
       <Container className="pb-3">
         <NavbarWrapper />
-        <WinGame
-          isOpen={isGameWon && !isGameLost}
-          mint={handleWonGame}
-          onClose={() => setIsGameWon(false)}
-        />
-        <LoseGame
-          isOpen={isGameLost && !isGameWon}
-          onClose={() => setIsGameLost(false)}
-        />
-        <ConfirmModal isOpen={isOpen} />
-
-        <Row className="game-row justify-content-between mx-md-5 mt-3">
-          <Grid
-            player={players.find((x) => x.address !== address)}
-            address={address}
-            guesses={myGuesses}
-            currentGuess={currentGuess}
-            solution={oppSol}
-            ready={isGameStarted}
-            status={myStatus}
-            injuredStatus={myInjuredStatus}
+        <div className="arena">
+          <WinGame
+            isOpen={isGameWon && !isGameLost}
+            mint={handleWonGame}
+            onClose={() => setIsGameWon(false)}
           />
-          <Col md={2}>
-            <Timer
-              duration={duration}
-              timerKey={key}
-              isPlaying={isPlaying}
-              onComplete={onComplete}
+          <LoseGame
+            isOpen={isGameLost && !isGameWon}
+            onClose={() => setIsGameLost(false)}
+          />
+          <ConfirmModal isOpen={isOpen} />
+
+          <Row className="game-row justify-content-between mx-md-5">
+            <Grid
+              player={players.find((x) => x.address !== address)}
+              address={address}
+              guesses={myGuesses}
+              currentGuess={currentGuess}
+              solution={oppSol}
+              ready={isGameStarted}
+              status={myStatus}
+              injuredStatus={myInjuredStatus}
             />
-          </Col>
+            <Col md={2}>
+              <Timer
+                duration={duration}
+                timerKey={key}
+                isPlaying={isPlaying}
+                onComplete={onComplete}
+              />
+            </Col>
 
-          <Grid
-            player={players.find((x) => x.address === address)}
-            address={address}
-            guesses={opponentGuesses}
-            currentGuess={""}
-            solution={solution}
-            status={opponentStatus}
-            injuredStatus={opponentInjuredStatus}
-            ready={true}
-          />
-        </Row>
+            <Grid
+              player={players.find((x) => x.address === address)}
+              address={address}
+              guesses={opponentGuesses}
+              currentGuess={""}
+              solution={solution}
+              status={opponentStatus}
+              injuredStatus={opponentInjuredStatus}
+              ready={true}
+            />
+          </Row>
 
-        <Keyboard
-          onChar={onChar}
-          onDelete={onDelete}
-          onEnter={onEnter}
-          guesses={myGuesses}
-          isTurn={turn}
-          isGameEnded={isGameEnded}
-          isGameStarted={isGameStarted}
-          currentGuess={currentGuess}
-        />
+          <Row className="mx-md-3 align-items-baseline">
+            <PerkBox selectedPerks={[1, 2, 3, 4]} />
+            <Keyboard
+              onChar={onChar}
+              onDelete={onDelete}
+              onEnter={onEnter}
+              guesses={myGuesses}
+              isTurn={turn}
+              isGameEnded={isGameEnded}
+              isGameStarted={isGameStarted}
+              currentGuess={currentGuess}
+            />
+            <PerkBox selectedPerks={[-1, -1, -1, -1]} />
+          </Row>
+        </div>
       </Container>
     </div>
   );

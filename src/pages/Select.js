@@ -31,10 +31,11 @@ export default function Select({ socket }) {
   const [isGameStarted, setIsGameStarted] = useState(false);
   const [currentGuess, setCurrentGuess] = useState("");
   const [player, setPlayer] = useState(0);
+  const [perks, setPerks] = useState([]);
   const [canEdit, setCanEdit] = useState(false);
   const [time, setTime] = useState(20);
   const { game, setGame } = useGameContext();
-  const { address } = usePlayerContext();
+  const { address, player: currentPlayer } = usePlayerContext();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -95,6 +96,17 @@ export default function Select({ socket }) {
       return alert("An error occurred. You must choose 5 unique eggs");
     }
 
+    console.log(perks);
+    player === 1
+      ? setGame((prevGame) => ({
+          ...prevGame,
+          player1: { ...prevGame.player1, perks },
+        }))
+      : setGame((prevGame) => ({
+          ...prevGame,
+          player2: { ...prevGame.player2, perks },
+        }));
+    setTimeout(() => console.log(game), 3000);
     setIsOpen(true);
     const tx = await initGame(game.code, guessArr, player - 1);
     setIsOpen(false);
@@ -120,18 +132,18 @@ export default function Select({ socket }) {
   return (
     <Container>
       <NavbarWrapper />
-      <Row className="mt-5 select">
+      <Row className="select">
         <Col md="3">
           <Card>
             <CardTitle>
               <h2>Select 4 Perks</h2>
             </CardTitle>
             <CardBody>
-              <PerkWheel />
-              <div className="position-absolute left-30 text-center">
+              <PerkWheel setPerks={setPerks} />
+              {/* <div className="position-absolute left-30 text-center">
                 <img src={Lock} alt="" />
                 <h5> Coming Soon</h5>
-              </div>
+              </div> */}
             </CardBody>
           </Card>
         </Col>
@@ -171,6 +183,7 @@ export default function Select({ socket }) {
             onChar={onChar}
             onDelete={onDelete}
             isTurn={true}
+            balances={currentPlayer.balances}
             currentGuess={currentGuess}
           />
         </Col>

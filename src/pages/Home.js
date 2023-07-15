@@ -24,7 +24,7 @@ function Home() {
     <Container>
       <NavbarWrapper />
 
-      <div className="text-center mt-5 ">
+      <div className="text-center">
         <img
           src={LogoFull}
           alt=""
