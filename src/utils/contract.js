@@ -2,9 +2,9 @@ import MythToken from "../contract/abi/MythToken.json";
 import Myth from "../contract/abi/Myth.json";
 import { ethers, providers, utils } from "ethers";
 
-const provider = window.provider
-  ? window.provider
-  : new providers.Web3Provider(window.ethereum);
+const provider = window.ethereum
+  ? new providers.Web3Provider(window.ethereum)
+  : new providers.Web3Provider();
 const signer = provider.getSigner();
 
 export const tokenContract = new ethers.Contract(
@@ -18,7 +18,7 @@ export const initialMint = async () => {
   try {
     const res = await contract.initialMint();
     const tx = await res.wait();
-    console.log(tx, res);
+
     return tx?.transactionHash;
   } catch (err) {
     console.log(err);
@@ -27,11 +27,10 @@ export const initialMint = async () => {
 };
 
 export const initGame = async (id, eggs, action) => {
-  console.log(id, eggs, action);
   try {
     const res = await contract.initGame(id, eggs, action);
     const tx = await res.wait();
-    console.log(tx);
+
     return tx?.transactionHash;
   } catch (err) {
     console.log(err);
@@ -40,11 +39,10 @@ export const initGame = async (id, eggs, action) => {
 };
 
 export const wonGame = async (id, eggs, game) => {
-  console.log(id, eggs, game);
   try {
     const res = await contract.wonGame(id, eggs, game);
     const tx = await res.wait();
-    console.log(tx);
+
     return tx?.transactionHash;
   } catch (err) {
     console.log(err);
@@ -60,7 +58,6 @@ export const getBalance = async (address) => {
       addresses,
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
     );
-    console.log(balance, eggs);
 
     return {
       balance: Math.floor(utils.formatEther(balance.toString())),
@@ -159,7 +156,7 @@ export const getBalance = async (address) => {
 //       input[3]
 //     );
 //     const receipt = await tx.wait();
-//     console.log(tx, receipt);
+//
 //     const statuses = getGuessStatuses(response);
 //     return statuses;
 //   } catch (err) {

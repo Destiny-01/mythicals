@@ -40,7 +40,6 @@ export default function Select({ socket }) {
 
   useEffect(() => {
     if (game) {
-      console.log(game.player1.address, address);
       if (game.player1.address === address) {
         setPlayer(1);
       } else if (game.player2.address === address) {
@@ -49,7 +48,6 @@ export default function Select({ socket }) {
     }
 
     socket.on("init", (id, gameCode) => {
-      console.log("init", id, game.code);
       if ((id === 1 && player === 1) || (id === 2 && player === 2)) {
         setGame((currentGame) => ({ ...currentGame, code: gameCode, time }));
         navigate("/room/" + gameCode);
@@ -57,7 +55,6 @@ export default function Select({ socket }) {
     });
 
     socket.on("time", (time) => {
-      console.log(time);
       setTime(time);
     });
 
@@ -96,7 +93,6 @@ export default function Select({ socket }) {
       return alert("An error occurred. You must choose 5 unique eggs");
     }
 
-    console.log(perks);
     player === 1
       ? setGame((prevGame) => ({
           ...prevGame,
@@ -106,13 +102,11 @@ export default function Select({ socket }) {
           ...prevGame,
           player2: { ...prevGame.player2, perks },
         }));
-    setTimeout(() => console.log(game), 3000);
     setIsOpen(true);
     const tx = await initGame(game.code, guessArr, player - 1);
     setIsOpen(false);
 
     if (tx) {
-      console.log(tx);
       socket.emit(
         player === 1 ? "newGame" : "joinGame",
         game.code,
@@ -132,7 +126,7 @@ export default function Select({ socket }) {
   return (
     <Container>
       <NavbarWrapper />
-      <Row className="select">
+      <Row className="mt-5 select">
         <Col md="3">
           <Card>
             <CardTitle>
@@ -224,7 +218,6 @@ export default function Select({ socket }) {
                   step={5}
                   onChange={(e) => setTime(e.target.value)}
                 />
-                {console.log(player, canEdit)}
                 {canEdit && player === 1 ? (
                   <div
                     className="pe-3"

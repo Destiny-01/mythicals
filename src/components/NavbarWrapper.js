@@ -22,7 +22,7 @@ export default function NavbarWrapper() {
   const { address, disconnect, player, balance } = usePlayerContext();
 
   return (
-    <Navbar expand="md" className="p-0 m-0 pt-2 position-absolute top-0" dark>
+    <Navbar expand="md" className="p-0 m-0 pt-2" dark>
       <NavbarBrand href="/" className="p-0 pe-md-5">
         <img src={Logo} alt="WOw" />
       </NavbarBrand>

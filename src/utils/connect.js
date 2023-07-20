@@ -1,12 +1,14 @@
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import axios from "../config/axios";
 import { providers, Wallet } from "ethers";
-import { devnet } from "./chains";
+import { mumbai } from "./chains";
 
-const chain = devnet;
+const chain = mumbai;
 const { ethereum } = window;
 export const wcProvider = new WalletConnectProvider({
   rpc: {
+    80001:
+      "https://polygon-mumbai.g.alchemy.com/v2/-D6q_IdN2AiCh4k44LnX3R8CJnoOv4jG",
     1666900000: "https://api.s0.ps.hmny.io",
     137: "https://matic-mainnet.chainstacklabs.com",
   },
@@ -35,7 +37,6 @@ export const metamaskConnect = async () => {
 
 export const walletConnect = async () => {
   try {
-    console.log(wcProvider);
     if (wcProvider.chainId !== chain.chainId) {
       return alert("Connect to harmony devnet");
     }
@@ -55,7 +56,6 @@ export const walletConnect = async () => {
 };
 
 wcProvider.on("chainChanged", async (chainId) => {
-  console.log(chainId);
   if (chainId !== chain.chainId) {
     await wcProvider.disconnect();
     return alert("Connect to harmony chain");
@@ -111,7 +111,6 @@ const changeChainId = async () => {
 
 export const burnerWallet = async () => {
   const { address, privateKey } = Wallet.createRandom();
-  console.log(address);
 
   const res = await axios.post("/api/connect", {
     address,

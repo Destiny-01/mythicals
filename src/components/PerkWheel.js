@@ -45,7 +45,6 @@ export default function PerkWheel({ setPerks }) {
     setSelectedPerks((prevPerks) => {
       const index = prevPerks.findIndex((x) => x === null);
       prevPerks[index] = currentIndex;
-      console.log(index, prevPerks, currentIndex);
       setPerks([...prevPerks]);
       return [...prevPerks];
     });

@@ -83,14 +83,12 @@ export const PlayerProvider = ({ children }) => {
             method: "eth_accounts",
           })
           .then((accounts) => {
-            console.log(accounts);
             if (accounts.length > 0) {
               setAddress(accounts[0]);
               accounts[0] &&
                 axios
                   .get("/api/player/" + accounts[0])
                   .then((res) => {
-                    console.log(res.data);
                     setPlayer(res.data.data);
                   })
                   .catch((err) => {

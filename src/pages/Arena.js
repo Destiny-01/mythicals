@@ -103,7 +103,6 @@ export default function Arena({ socket }) {
     const fetchData = async () => {
       try {
         const res = await axios.get(`/api/game?id=${id}&address=${address}`);
-        console.log(res);
 
         if (res.data.data) {
           const game = res.data.data;
@@ -160,7 +159,6 @@ export default function Arena({ socket }) {
     };
     const tx = await wonGame(id, eggs, data);
 
-    console.log(tx);
     setIsOpen(false);
     setIsGameWon(false);
     if (!tx) {

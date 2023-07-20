@@ -13,7 +13,6 @@ export default function UsernameModal({
   const [username, setUsername] = useState("");
   const navigate = useNavigate();
   const { setAddress, setProvider } = usePlayerContext();
-  console.log(isToggled);
 
   const onClick = () => {
     if (username.length === 0) {
